@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"encoding/json"
-	"fmt"
 	"log"
 	"main/app/Business"
 	"main/app/ErrorHandle"
@@ -15,10 +14,11 @@ import (
 	"runtime"
 	"sync"
 	"syscall"
-	"time"
 )
 
 func main() {
+	// 初始化log
+	ErrorHandle.Init(os.Stdout, os.Stdout, os.Stderr)
 
 	// 監聽外部輸入已關閉
 	runtime.GOMAXPROCS(runtime.NumCPU())
@@ -31,14 +31,11 @@ func main() {
 		wg.Done()
 	}()
 	wg.Add(1)
-	fmt.Printf("Ctrl+C兩次 或 按叉叉 以結束。\n\n")
-	fmt.Printf("[%s] %s Bot Start\n", time.Now().In(time.FixedZone("", +8*3600)).Format("2006-01-02 15:04:05"), model.BotSetting.TargetTwitchID)
+	ErrorHandle.Info.Printf("Ctrl+C兩次 或 按叉叉 以結束。\n\n")
 
 	//讀取設定檔
 	readBotSetting()
-
-	// 初始化log
-	ErrorHandle.Init(os.Stdout, os.Stdout, os.Stderr)
+	ErrorHandle.Info.Printf("%s Bot Start\n", model.BotSetting.TargetTwitchID)
 
 	// 啟用背景
 	Business.OpayInit()
@@ -48,9 +45,10 @@ func main() {
 	go TwitchBot.Init()
 
 	wg.Wait()
-	fmt.Printf("[%s] Bot End\n", time.Now().In(time.FixedZone("", +8*3600)).Format("2006-01-02 15:04:05"))
+	ErrorHandle.Info.Printf("Bot End\n")
 }
 
+// 讀取txt作為設定檔
 func readBotSetting() {
 	var tempStr string
 	// open the file

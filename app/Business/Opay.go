@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
+	"main/app/ErrorHandle"
 	"main/app/TwitchBot"
 	"main/app/model"
 	"net/http"
@@ -65,22 +65,22 @@ func GetOpayData() {
 	defer resp.Body.Close()
 
 	if resp.StatusCode != 200 {
-		fmt.Println("Opay http response code : ", resp.StatusCode)
+		ErrorHandle.Error.Println("Opay http response code : ", resp.StatusCode)
 		return
 	}
 	if !strings.HasPrefix(resp.Header.Get("Content-Type"), "application/json") {
-		fmt.Println("Opay resp not json")
+		ErrorHandle.Error.Println("Opay resp not json")
 		return
 	}
 	bodyBytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		log.Println("ioutil.ReadAll err:", err)
+		ErrorHandle.Error.Println("ioutil.ReadAll err:", err)
 		return
 	}
 	oResp := opayResp{}
 	err = json.Unmarshal(bodyBytes, &oResp)
 	if err != nil {
-		log.Println("Unmarshal err:", err)
+		ErrorHandle.Error.Println("Unmarshal err:", err)
 		return
 	}
 	if len(oResp.LstDonate) == 0 {
@@ -93,7 +93,7 @@ func GetOpayData() {
 			donateCache[v.DonateID] = true
 			msg := fmt.Sprintf("/me 感謝 %s 贊助了 %d 元, %s", v.Name, v.Amount, v.MSG)
 
-			fmt.Printf("[%s]  %s 贊助了 %d 元: %s\n", time.Now().In(time.FixedZone("", +8*3600)).Format("2006-01-02 15:04:05"), v.Name, v.Amount, v.MSG)
+			ErrorHandle.Info.Printf("[%s]  %s 贊助了 %d 元: %s\n", time.Now().In(time.FixedZone("", +8*3600)).Format("2006-01-02 15:04:05"), v.Name, v.Amount, v.MSG)
 
 			TwitchBot.SendMessage(msg)
 		}

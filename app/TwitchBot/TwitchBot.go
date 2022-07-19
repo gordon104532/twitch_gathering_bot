@@ -1,10 +1,8 @@
 package TwitchBot
 
 import (
-	"fmt"
 	"main/app/ErrorHandle"
 	"main/app/model"
-	"time"
 
 	twitch "github.com/gempir/go-twitch-irc/v3"
 )
@@ -37,7 +35,7 @@ func Init() {
 		twitchMessageHandle(TwitchClient, message)
 	})
 
-	fmt.Printf("[%s] 加入Twitch頻道: %s \n", time.Now().In(time.FixedZone("", +8*3600)).Format("2006-01-02 15:04:05"), model.BotSetting.TargetTwitchID)
+	ErrorHandle.Info.Printf("加入Twitch頻道: %s \n", model.BotSetting.TargetTwitchID)
 	// 加入頻道
 	TwitchClient.Join(model.BotSetting.TargetTwitchID)
 
@@ -78,7 +76,7 @@ func twitchMessageHandle(client *twitch.Client, message twitch.PrivateMessage) {
 	if model.BotSetting.AutoHello {
 		if _, ok := ofaAutoHiList[message.User.Name]; !ok {
 			ofaAutoHiList[message.User.Name] = true
-			context = message.User.DisplayName + " 安安 ofadorYeah "
+			context = message.User.DisplayName + " 安安 " + model.BotSetting.AutoHelloEmoji
 		}
 	}
 

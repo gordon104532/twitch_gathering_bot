@@ -10,4 +10,5 @@ type botSettingModel struct {
 	ChatTwitchID   string `json:"chatTwitchID"`
 	TwitchOAth     string `json:"twitchOAth"`
 	AutoHello      bool   `json:"autoHello"`
+	AutoHelloEmoji string `json:"autoHelloEmoji"`
 }
