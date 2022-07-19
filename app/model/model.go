@@ -9,4 +9,5 @@ type botSettingModel struct {
 	OpayCookie     string `json:"opayCookie"`
 	ChatTwitchID   string `json:"chatTwitchID"`
 	TwitchOAth     string `json:"twitchOAth"`
+	AutoHello      bool   `json:"autoHello"`
 }

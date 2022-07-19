@@ -22,6 +22,8 @@ botSetting.txt
 > 從圖奇申請一個 OAUTH 的密鑰 https://twitchapps.com/tmi/ (請妥善保管)
 - opayToken、opayCookie
 > 這兩個比較複雜暫且保持原樣試試看
+- autoHello
+> 自動打招呼的開關 true:開 false:關
 
 ```
 {
@@ -30,7 +32,8 @@ botSetting.txt
     "opayToken":"4jR8bmQj%2FyIxCbuczdpPhRFCTTOCGOStfu9laNR9RT1L3ZUgBvJFe9iJtkB%2FIIhCPpNxDwSSaOAqoxxvNOXm7RgGG1200uwIoZPib%2BNiE5%2FQwtaFkYC2wLLIFmMrCqbpMYQFjr6BMLYPJMDdm%2BIvrLBKuKo%3D",
     "opayCookie":"YlSbHQpkKPWeyFc6CVnOZ5skpidCYIxvjK4aCaGs40CCgs9pU/hRDbF3aWzf5QHT/k+p1BFd634KTum6IDkvYsIBsyubKneBuQKHkmo4mu9Vl0LxDYO/8SEFYGo/kHenXUXYbXmsvn9yrE6u5y39uZzak54=",
     "chatTwitchID":"ofadoraifu",
-    "twitchOAth":"oauth:ijf94mqvg2x0u7mv8n7keidwo"
+    "twitchOAth":"oauth:ijf94mqvg2x0u7mv8n7keidwo",
+    "autoHello":true
 }
 
 ```

@@ -32,7 +32,7 @@ func main() {
 	}()
 	wg.Add(1)
 	fmt.Printf("Ctrl+C兩次 或 按叉叉 以結束。\n\n")
-	fmt.Printf("[%s] ofadoraifu Bot Start\n", time.Now().In(time.FixedZone("", +8*3600)).Format("2006-01-02 15:04:05"))
+	fmt.Printf("[%s] %s Bot Start\n", time.Now().In(time.FixedZone("", +8*3600)).Format("2006-01-02 15:04:05"), model.BotSetting.TargetTwitchID)
 
 	//讀取設定檔
 	readBotSetting()

@@ -16,12 +16,26 @@ import (
 
 var SendMsgQueue []string
 var TwitchClient *twitch.Client
+var ofaAutoHiList map[string]bool
 
 func Init() {
+
+	// 初始化對話紀錄
+	ofaAutoHiList = make(map[string]bool)
+	ofaAutoHiList = map[string]bool{
+		"nightbot":       true,
+		"streamelements": true,
+	}
+	ofaAutoHiList[model.BotSetting.ChatTwitchID] = true
+
 	SendMsgQueue = make([]string, 0)
 
 	// or client := twitch.NewAnonymousClient() for an anonymous user (no write capabilities)
 	TwitchClient = twitch.NewClient(model.BotSetting.ChatTwitchID, model.BotSetting.TwitchOAth)
+
+	TwitchClient.OnPrivateMessage(func(message twitch.PrivateMessage) {
+		twitchMessageHandle(TwitchClient, message)
+	})
 
 	fmt.Printf("[%s] 加入Twitch頻道: %s \n", time.Now().In(time.FixedZone("", +8*3600)).Format("2006-01-02 15:04:05"), model.BotSetting.TargetTwitchID)
 	// 加入頻道
@@ -54,5 +68,21 @@ func TwitchCron() {
 
 		// 清空queue
 		SendMsgQueue = make([]string, 0)
+	}
+}
+
+func twitchMessageHandle(client *twitch.Client, message twitch.PrivateMessage) {
+
+	// 自動打招呼
+	var context string
+	if model.BotSetting.AutoHello {
+		if _, ok := ofaAutoHiList[message.User.Name]; !ok {
+			ofaAutoHiList[message.User.Name] = true
+			context = message.User.DisplayName + " 安安 ofadorYeah "
+		}
+	}
+
+	if len(context) > 1 {
+		client.Say(message.Channel, context)
 	}
 }
