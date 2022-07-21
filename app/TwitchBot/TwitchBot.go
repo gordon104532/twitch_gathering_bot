@@ -76,7 +76,7 @@ func twitchMessageHandle(client *twitch.Client, message twitch.PrivateMessage) {
 	if model.BotSetting.AutoHello {
 		if _, ok := ofaAutoHiList[message.User.Name]; !ok {
 			ofaAutoHiList[message.User.Name] = true
-			context = message.User.DisplayName + " 安安 " + model.BotSetting.AutoHelloEmoji
+			context = message.User.DisplayName + " " + model.BotSetting.AutoHelloMsg + " " + model.BotSetting.AutoHelloEmoji
 		}
 	}
 

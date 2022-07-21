@@ -13,6 +13,7 @@ import (
 )
 
 var donateCache map[string]bool
+var opayApiCount int = 0
 
 type opayResp struct {
 	LstDonate []donateList `json:"lstDonate"`
@@ -41,7 +42,7 @@ func OpayInit() {
 	donateCache = make(map[string]bool)
 }
 func GetOpayData() {
-	u := fmt.Sprintf("https://payment.opay.tw/Broadcaster/CheckDonate/%s", "7BF5D2184771810862F9070719909401")
+	u := fmt.Sprintf("https://payment.opay.tw/Broadcaster/CheckDonate/%s", model.BotSetting.OpayID)
 	req, err := http.NewRequest("POST", u, strings.NewReader("__RequestVerificationToken="+model.BotSetting.OpayToken))
 	if err != nil {
 		return
@@ -68,6 +69,17 @@ func GetOpayData() {
 		ErrorHandle.Error.Println("Opay http response code : ", resp.StatusCode)
 		return
 	}
+
+	opayApiCount++
+	if resp.StatusCode == 200 {
+		if opayApiCount == 1 {
+			ErrorHandle.Info.Println("歐付寶Donate檢查已成功 1 次")
+		}
+		if opayApiCount == 600 {
+			ErrorHandle.Info.Println("歐付寶Donate檢查已成功 600 次(30分鐘)")
+		}
+	}
+
 	if !strings.HasPrefix(resp.Header.Get("Content-Type"), "application/json") {
 		ErrorHandle.Error.Println("Opay resp not json")
 		return

@@ -77,4 +77,8 @@ func readBotSetting() {
 	}
 
 	file.Close()
+
+	// 印出開關
+	ErrorHandle.Info.Printf("開關-斗內檢查: %v\n", model.BotSetting.CheckDonate)
+	ErrorHandle.Info.Printf("開關-自動安安: %v\n", model.BotSetting.AutoHello)
 }
