@@ -5,7 +5,7 @@
 2. 自動打招呼
 
 ## 打包
-- go build -mod=mod -o ofaBot.exe
+- go build -mod=mod -o ofaBot_v2.exe
 
 ## 使用說明
 1. 解壓縮 (主程式\設定檔\source Code)

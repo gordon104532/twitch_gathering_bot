@@ -75,8 +75,8 @@ func GetOpayData() {
 		if opayApiCount == 1 {
 			ErrorHandle.Info.Println("歐付寶Donate檢查已成功 1 次")
 		}
-		if opayApiCount == 600 {
-			ErrorHandle.Info.Println("歐付寶Donate檢查已成功 600 次(30分鐘)")
+		if opayApiCount%600 == 0 {
+			ErrorHandle.Info.Printf("歐付寶Donate檢查已成功 %d 次(%d分鐘)\n", opayApiCount, opayApiCount/20)
 		}
 	}
 

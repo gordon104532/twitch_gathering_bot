@@ -6,7 +6,6 @@ import (
 	"log"
 	"main/app/Business"
 	"main/app/ErrorHandle"
-	"main/app/TwitchBot"
 	"main/app/core"
 	"main/app/model"
 	"os"
@@ -42,7 +41,7 @@ func main() {
 	core.StartCron()
 
 	// TwitchBot 啟動
-	go TwitchBot.Init()
+	// go TwitchBot.Init()
 
 	wg.Wait()
 	ErrorHandle.Info.Printf("Bot End\n")
