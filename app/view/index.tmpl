@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="refresh" content="60;url=http://127.0.0.1:8787/87">
+
+    <link rel="stylesheet" href="/assetPath/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assetPath/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="/assetPath/css/bootstrap-reboot.min.css">
+    <script rel="script" src="/assetPath/js/bootstrap.bundle.js"></script>
+    
+    <title>八七集氣條</title>
+</head>
+<body>
+<div style="text-align:center;">{{.title}}(Lv.{{.level}})</div>
+
+<div class="progress" style="height: 25px;">
+  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{.percent}}%;" aria-valuenow="{{.percent}}" aria-valuemin="0" aria-valuemax="100">八七值: {{.nowPoint}} ({{.percent}}%)</div>
+</div>
+
+<div style="float:left;">{{.startPoint}}</div>
+<div style="float:right;">{{.endPoint}}</div>
+</body>
+</html>
+

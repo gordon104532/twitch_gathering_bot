@@ -9,7 +9,6 @@ import (
 	"main/app/model"
 	"net/http"
 	"strings"
-	"time"
 )
 
 var donateCache map[string]bool
@@ -42,15 +41,15 @@ func OpayInit() {
 	donateCache = make(map[string]bool)
 }
 func GetOpayData() {
-	u := fmt.Sprintf("https://payment.opay.tw/Broadcaster/CheckDonate/%s", model.BotSetting.OpayID)
-	req, err := http.NewRequest("POST", u, strings.NewReader("__RequestVerificationToken="+model.BotSetting.OpayToken))
+	u := fmt.Sprintf("https://payment.opay.tw/Broadcaster/CheckDonate/%s", model.BotSetting.Opay.OpayID)
+	req, err := http.NewRequest("POST", u, strings.NewReader("__RequestVerificationToken="+model.BotSetting.Opay.OpayToken))
 	if err != nil {
 		return
 	}
 
 	cookie := &http.Cookie{
 		Name:   "__RequestVerificationToken_Lw__",
-		Value:  model.BotSetting.OpayCookie,
+		Value:  model.BotSetting.Opay.OpayCookie,
 		Domain: "payment.opay.tw",
 		Path:   "/",
 		MaxAge: 0,
@@ -103,11 +102,12 @@ func GetOpayData() {
 		// 不在快取中 則加入快取
 		if _, ok := donateCache[v.DonateID]; !ok {
 			donateCache[v.DonateID] = true
-			msg := fmt.Sprintf("/me 感謝 %s 贊助了 %d 元, %s", v.Name, v.Amount, v.MSG)
+			msg := fmt.Sprintf(model.BotSetting.Opay.OpayMsg, v.Name, v.Amount, v.MSG)
 
-			ErrorHandle.Info.Printf("[%s]  %s 贊助了 %d 元: %s\n", time.Now().In(time.FixedZone("", +8*3600)).Format("2006-01-02 15:04:05"), v.Name, v.Amount, v.MSG)
+			ErrorHandle.Info.Printf("%s 贊助了 %d 元: %s\n", v.Name, v.Amount, v.MSG)
 
 			TwitchBot.SendMessage(msg)
+			TwitchBot.GatheringOpayPoint(v.Amount)
 		}
 	}
 }

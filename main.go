@@ -6,6 +6,8 @@ import (
 	"log"
 	"main/app/Business"
 	"main/app/ErrorHandle"
+	"main/app/Router"
+	"main/app/TwitchBot"
 	"main/app/core"
 	"main/app/model"
 	"os"
@@ -34,14 +36,17 @@ func main() {
 
 	//讀取設定檔
 	readBotSetting()
-	ErrorHandle.Info.Printf("%s Bot Start\n", model.BotSetting.TargetTwitchID)
+	ErrorHandle.Info.Printf("%s Bot Start\n", model.BotSetting.General.TargetTwitchID)
 
 	// 啟用背景
 	Business.OpayInit()
 	core.StartCron()
 
+	// api服務
+	go Router.Router()
+
 	// TwitchBot 啟動
-	// go TwitchBot.Init()
+	go TwitchBot.Init()
 
 	wg.Wait()
 	ErrorHandle.Info.Printf("Bot End\n")
@@ -78,6 +83,7 @@ func readBotSetting() {
 	file.Close()
 
 	// 印出開關
-	ErrorHandle.Info.Printf("開關-斗內檢查: %v\n", model.BotSetting.CheckDonate)
-	ErrorHandle.Info.Printf("開關-自動安安: %v\n", model.BotSetting.AutoHello)
+	ErrorHandle.Info.Printf("開關-斗內檢查: %v\n", model.BotSetting.Opay.CheckDonate)
+	ErrorHandle.Info.Printf("開關-自動安安: %v\n", model.BotSetting.Twitch.AutoHello)
+	ErrorHandle.Info.Printf("開關-八七集氣: %v\n", model.BotSetting.GatheringEvent.GatheringSwitch)
 }

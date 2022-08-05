@@ -1,2 +1,4 @@
-botSetting.txt
+*.txt
 *.exe
+*.7z
+.docx
