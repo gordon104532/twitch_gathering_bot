@@ -14,11 +14,11 @@
     
     <title>八七集氣條</title>
 </head>
-<body>
+<body style="color:{{.titleColor}};">
 <div style="text-align:center;">{{.title}}(Lv.{{.level}})</div>
 
 <div class="progress" style="height: 25px;">
-  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{.percent}}%;" aria-valuenow="{{.percent}}" aria-valuemin="0" aria-valuemax="100">八七值: {{.nowPoint}} ({{.percent}}%)</div>
+  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{.percent}}%; color:{{.barTxtCollor}} ;background-color: {{.barCollor}};" aria-valuenow="{{.percent}}" aria-valuemin="0" aria-valuemax="100">八七值: {{.nowPoint}}</div>
 </div>
 
 <div style="float:left;">{{.startPoint}}</div>

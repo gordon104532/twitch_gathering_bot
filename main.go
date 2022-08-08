@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"fmt"
 	"log"
 	"main/app/Business"
 	"main/app/ErrorHandle"
@@ -86,4 +87,28 @@ func readBotSetting() {
 	ErrorHandle.Info.Printf("開關-斗內檢查: %v\n", model.BotSetting.Opay.CheckDonate)
 	ErrorHandle.Info.Printf("開關-自動安安: %v\n", model.BotSetting.Twitch.AutoHello)
 	ErrorHandle.Info.Printf("開關-八七集氣: %v\n", model.BotSetting.GatheringEvent.GatheringSwitch)
+
+	if model.BotSetting.GatheringEvent.GatheringSwitch {
+		levelPoint := map[int]int{
+			0:  0,
+			1:  model.BotSetting.GatheringEvent.LevelSetting.Lv1,
+			2:  model.BotSetting.GatheringEvent.LevelSetting.Lv2,
+			3:  model.BotSetting.GatheringEvent.LevelSetting.Lv3,
+			4:  model.BotSetting.GatheringEvent.LevelSetting.Lv4,
+			5:  model.BotSetting.GatheringEvent.LevelSetting.Lv5,
+			6:  model.BotSetting.GatheringEvent.LevelSetting.Lv6,
+			7:  model.BotSetting.GatheringEvent.LevelSetting.Lv7,
+			8:  model.BotSetting.GatheringEvent.LevelSetting.Lv8,
+			9:  model.BotSetting.GatheringEvent.LevelSetting.Lv9,
+			10: model.BotSetting.GatheringEvent.LevelSetting.Lv10,
+		}
+
+		for i := 0; i < 10; i++ {
+			if levelPoint[i] > levelPoint[i+1] {
+				ErrorHandle.Error.Printf("八七集氣 等級設定有誤: lv.%d 比 lv.%d 小，請關閉bot並檢查設定檔\n", i+1, i)
+				fmt.Scanln()
+			}
+		}
+	}
+
 }

@@ -107,7 +107,7 @@ func GetOpayData() {
 			ErrorHandle.Info.Printf("%s 贊助了 %d 元: %s\n", v.Name, v.Amount, v.MSG)
 
 			TwitchBot.SendMessage(msg)
-			TwitchBot.GatheringOpayPoint(v.Amount)
+			TwitchBot.GatheringOpayPoint(v.Name, v.Amount)
 		}
 	}
 }

@@ -2,6 +2,7 @@ package model
 
 var GatheringLevel int
 var BotSetting BotSettingModel
+var DetailSetting DetailSettingModel
 
 type BotSettingModel struct {
 	General struct {
@@ -26,11 +27,55 @@ type BotSettingModel struct {
 		SubPoint        int  `json:"subPoint"`
 		CheerPoint      int  `json:"cheerPoint"`
 		OpayPoint       int  `json:"opayPoint"`
-		LevelOne        int  `json:"levelOne"`
-		LevelTwo        int  `json:"levelTwo"`
-		LevelThree      int  `json:"levelThree"`
-		LevelFour       int  `json:"levelFour"`
-		LevelFive       int  `json:"levelFive"`
-		InitPoint       int  `json:"initPoint"`
+		LevelSetting    struct {
+			Lv1  int `json:"lv1"`
+			Lv2  int `json:"lv2"`
+			Lv3  int `json:"lv3"`
+			Lv4  int `json:"lv4"`
+			Lv5  int `json:"lv5"`
+			Lv6  int `json:"lv6"`
+			Lv7  int `json:"lv7"`
+			Lv8  int `json:"lv8"`
+			Lv9  int `json:"lv9"`
+			Lv10 int `json:"lv10"`
+		} `json:"levelSetting"`
+		InitPoint int `json:"initPoint"`
 	} `json:"gatheringEvent"`
+}
+
+type DetailSettingModel struct {
+	CheckEmoji  string `json:"checkEmoji"`
+	ProgressBar struct {
+		TitleColor   string `json:"titleColor"`
+		BarCollor    string `json:"barCollor"`
+		BarTxtCollor string `json:"barTxtCollor"`
+	} `json:"progressBar"`
+	LogSetting struct {
+		CheerPerRoll int `json:"cheerPerRoll"`
+		OpayPerRoll  int `json:"opayPerRoll"`
+	} `json:"logSetting"`
+	Subgift struct {
+		One    int `json:"one"`
+		Three  int `json:"three"`
+		Six    int `json:"six"`
+		Twelve int `json:"twelve"`
+	} `json:"subgift"`
+	Resub struct {
+		Zero   int `json:"zero"`
+		One    int `json:"one"`
+		Three  int `json:"three"`
+		Six    int `json:"six"`
+		Twelve int `json:"twelve"`
+	} `json:"resub"`
+	Sub struct {
+		One    int `json:"one"`
+		Three  int `json:"three"`
+		Six    int `json:"six"`
+		Twelve int `json:"twelve"`
+	} `json:"sub"`
+	Tier struct {
+		One   int `json:"one"`
+		Two   int `json:"two"`
+		Three int `json:"three"`
+	} `json:"tier"`
 }
