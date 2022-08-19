@@ -14,20 +14,12 @@ import (
 
 var SendMsgQueue []string
 var TwitchClient *twitch.Client
-var ofaAutoHiList map[string]bool
 
 func Init() {
 	//初始化活動檔案
 	InitGatheringFile()
 	InitExpSettingFile()
-
-	// 初始化對話紀錄
-	ofaAutoHiList = make(map[string]bool)
-	ofaAutoHiList = map[string]bool{
-		"nightbot":       true,
-		"streamelements": true,
-	}
-	ofaAutoHiList[model.BotSetting.Twitch.ChatTwitchID] = true
+	InitIindexFile()
 
 	SendMsgQueue = make([]string, 0)
 
@@ -78,12 +70,6 @@ func TwitchCron() {
 func twitchMessageHandle(client *twitch.Client, message twitch.PrivateMessage) {
 	// 自動打招呼
 	var context string
-	if model.BotSetting.Twitch.AutoHello {
-		if _, ok := ofaAutoHiList[message.User.Name]; !ok {
-			ofaAutoHiList[message.User.Name] = true
-			context = message.User.DisplayName + " " + model.BotSetting.Twitch.AutoHelloMsg + " " + model.BotSetting.Twitch.AutoHelloEmoji
-		}
-	}
 
 	// 集氣挑戰功能
 	if model.BotSetting.GatheringEvent.GatheringSwitch {

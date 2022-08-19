@@ -16,6 +16,7 @@ import (
 	"runtime"
 	"sync"
 	"syscall"
+	"time"
 )
 
 func main() {
@@ -43,11 +44,12 @@ func main() {
 	Business.OpayInit()
 	core.StartCron()
 
-	// api服務
-	go Router.Router()
-
 	// TwitchBot 啟動
 	go TwitchBot.Init()
+
+	// api服務
+	time.Sleep(time.Second * 4)
+	go Router.Router()
 
 	wg.Wait()
 	ErrorHandle.Info.Printf("Bot End\n")
@@ -85,7 +87,6 @@ func readBotSetting() {
 
 	// 印出開關
 	ErrorHandle.Info.Printf("開關-斗內檢查: %v\n", model.BotSetting.Opay.CheckDonate)
-	ErrorHandle.Info.Printf("開關-自動安安: %v\n", model.BotSetting.Twitch.AutoHello)
 	ErrorHandle.Info.Printf("開關-八七集氣: %v\n", model.BotSetting.GatheringEvent.GatheringSwitch)
 
 	if model.BotSetting.GatheringEvent.GatheringSwitch {

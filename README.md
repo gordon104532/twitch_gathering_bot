@@ -5,7 +5,9 @@
 2. 自動打招呼
 
 ## 打包
-- go build -mod=mod -o ofaBot_v4.exe
+- go build -mod=mod -o 87Bot_v1.exe
+- 64-bit
+> $ GOOS=darwin GOARCH=amd64 go build -o bin/app-amd64-darwin 87Bot_v1
 
 ## 使用說明
 1. 解壓縮 (主程式\設定檔\source Code)
@@ -62,10 +64,7 @@ botSetting.txt
     },
     "twitch":{
         "chatTwitchID":"ofadoraifu",
-        "twitchOAth":"oauth:ijf94mqvg2x0u7mv8n7keidwo",
-        "autoHello":true,
-        "autoHelloMsg": "安安",
-        "autoHelloEmoji": "ofadorYeah"
+        "twitchOAth":"oauth:ijf94mqvg2x0u7mv8n7keidwo"
     },
     "gatheringEvent":{
         "gatheringSwitch": true,
@@ -138,3 +137,15 @@ targetTwitchID
 opayID
 chatTwitchID
 twitchOAth
+
+### 正式版 87Bot_v1(v5) 
+- 移除自動打招呼功能
+- 移除perRoll功能 在紀錄中寫入"可抽"訊息
+- index.tmpl 改由程式建出，bootstrap從網路載(不需要app資料夾了)
+- 八七集氣條中的文字大一咪咪
+
+    <link rel="stylesheet" href="/assetPath/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/assetPath/css/bootstrap-grid.min.css">
+    <link rel="stylesheet" href="/assetPath/css/bootstrap-reboot.min.css">
+    <script rel="script" src="/assetPath/js/bootstrap.bundle.js"></script>
+    

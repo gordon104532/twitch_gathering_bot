@@ -97,10 +97,6 @@ func InitExpSettingFile() {
 				"barCollor":"",
 				"barTxtCollor": ""
 			},
-			"logSetting":{
-				"cheerPerRoll":100,
-				"opayPerRoll":50
-			},
 			"subgift":{
 				"one": 1,
 				"three": 3,
@@ -169,10 +165,68 @@ func InitExpSettingFile() {
 	file.Close()
 }
 
+// 初始化index檔
+func InitIindexFile() {
+	filename := "index.tmpl"
+
+	if _, err := os.Stat(filename); err == nil {
+
+	} else if errors.Is(err, os.ErrNotExist) {
+		// 無檔則建立
+		_, err := os.Create(filename)
+		if err != nil {
+			ErrorHandle.Error.Println("ERROR", "CreateFile: 建立檔案錯誤, "+err.Error())
+		}
+
+		//msgJSON, _ := json.Marshal(model.DetailSetting)
+
+		var detailRaw string = `
+		<!doctype html>
+		<html lang="en">
+		<head>
+			<meta charset="UTF-8">
+			<meta name="viewport"
+				content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+			<meta http-equiv="X-UA-Compatible" content="ie=edge">
+			<meta http-equiv="refresh" content="60;url=http://127.0.0.1:8787/87">
+
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+			<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+			<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+			<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+			<title>八七集氣條</title>
+		</head>
+		<body style="color:{{.titleColor}};">
+		<div style="text-align:center;">{{.title}}(Lv.{{.level}})</div>
+
+		<div class="progress" style="height: 25px;">
+		<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{.percent}}%; color:{{.barTxtCollor}} ;background-color: {{.barCollor}};font-size: larger;" aria-valuenow="{{.percent}}" aria-valuemin="0" aria-valuemax="100">八七值: {{.nowPoint}}</div>
+		</div>
+
+		<div style="float:left;">{{.startPoint}}</div>
+		<div style="float:right;">{{.endPoint}}</div>
+		</body>
+		</html>
+		`
+
+		werr := os.WriteFile(filename, []byte(detailRaw), 0644)
+		if werr != nil {
+			ErrorHandle.Error.Println("寫入index檔")
+		}
+		ErrorHandle.Info.Println("建立檔案:" + filename)
+
+	} else {
+		// Schrodinger: file may or may not exist. See err for details.
+		// Therefore, do *NOT* use !os.IsNotExist(err) to test for file existence
+		ErrorHandle.Info.Printf("InitIindexFile else err: %v\n", err)
+	}
+}
+
 // 活動紀錄
-func GatLog(event, alias, memo string, point, logTimes int) {
+func GatLog(event, alias, memo string, point int) {
 	now := time.Now().Format("01/02 15:04:05")
-	messeg := fmt.Sprintf("[%s] 事件:%s, 暱稱:%s, 分數:%d, 總分: %d, 可抽: %d, 備註: %s", now, event, alias, point, model.BotSetting.GatheringEvent.InitPoint, logTimes, memo)
+	messeg := fmt.Sprintf("[%s] 事件:%s, 暱稱:%s, 分數:%d, 總分: %d, 備註: %s", now, event, alias, point, model.BotSetting.GatheringEvent.InitPoint, memo)
 	pointLogger.Println(messeg)
 }
 
@@ -220,8 +274,7 @@ func GatheringOpayPoint(opayName string, opayValue int) {
 	model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint + addPoint
 
 	//活動紀錄
-	var logTimes int = opayValue / model.DetailSetting.LogSetting.OpayPerRoll
-	GatLog("歐富寶", opayName, fmt.Sprintf("金額:%d", opayValue), addPoint, logTimes)
+	GatLog("歐富寶", opayName, fmt.Sprintf("金額:%d", opayValue), addPoint)
 
 	// 檢查升級
 	isLevelup, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
@@ -301,8 +354,7 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 		model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint + addPoint
 
 		if addPoint > 0 {
-			logTime := month * tier
-			GatLog(event, message.User.DisplayName, fmt.Sprintf("月數:%d 層級:%d", month, tier), addPoint, logTime)
+			GatLog(event, message.User.DisplayName, fmt.Sprintf("月數:%d 層級:%d", month, tier), addPoint)
 		}
 
 		// 檢查升級
@@ -312,6 +364,9 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 		}
 	}
 }
+
+// 八七指令CD時間
+var commandCD bool = true
 
 // 小奇點加分與手動加分
 func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (context string) {
@@ -331,8 +386,7 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 				}
 
 				//活動紀錄
-				var logTimes int = cheerPoint / model.DetailSetting.LogSetting.CheerPerRoll
-				GatLog("小奇點", message.User.DisplayName, fmt.Sprintf("%d點", cheerPoint), addPoint, logTimes)
+				GatLog("小奇點", message.User.DisplayName, fmt.Sprintf("%d點", cheerPoint), addPoint)
 			}
 		}
 
@@ -353,7 +407,7 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 				model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint + manualPoint
 			}
 			//活動紀錄
-			GatLog("手動加", message.User.DisplayName, "", manualPoint, 1)
+			GatLog("手動加", message.User.DisplayName, "", manualPoint)
 			// 檢查升級
 			isLevelup, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
 			if isLevelup {
@@ -370,16 +424,27 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 				model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint - manualPoint
 			}
 			//活動紀錄
-			GatLog("手動減", message.User.DisplayName, "", manualPoint, 1)
+			GatLog("手動減", message.User.DisplayName, "", manualPoint)
 		}
 	}
 
 	if strings.Contains(message.Message, "!87LV") || strings.Contains(message.Message, "!87lv") {
-		_, _, context, _, _, _ = GatheringCheckLevelUp()
+		if commandCD {
+			_, _, context, _, _, _ = GatheringCheckLevelUp()
+			commandCD = false
+			go cdCoolDown()
+		}
+
 	} else {
 		// 寫回總分
 		UpdateBotSetting()
 	}
 
 	return
+}
+
+// CD 時間倒數
+func cdCoolDown() {
+	time.Sleep(time.Second * 30)
+	commandCD = true
 }

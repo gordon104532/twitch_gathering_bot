@@ -24,8 +24,9 @@ func Router() {
 		})
 	})
 
-	r.Static("/assetPath", "./app/asset")
-	r.LoadHTMLGlob("./app/view/*")
+	// r.Static("/assetPath", "./app/asset")
+	// r.LoadHTMLGlob("./app/view/*")
+	r.LoadHTMLGlob("./*.tmpl")
 
 	// init 做一次
 	TwitchBot.GatheringCheckLevelUp()

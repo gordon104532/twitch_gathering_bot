@@ -50,10 +50,6 @@ type DetailSettingModel struct {
 		BarCollor    string `json:"barCollor"`
 		BarTxtCollor string `json:"barTxtCollor"`
 	} `json:"progressBar"`
-	LogSetting struct {
-		CheerPerRoll int `json:"cheerPerRoll"`
-		OpayPerRoll  int `json:"opayPerRoll"`
-	} `json:"logSetting"`
 	Subgift struct {
 		One    int `json:"one"`
 		Three  int `json:"three"`
