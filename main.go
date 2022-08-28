@@ -41,7 +41,7 @@ func main() {
 	ErrorHandle.Info.Printf("%s Bot Start\n", model.BotSetting.General.TargetTwitchID)
 
 	// 啟用背景
-	Business.OpayInit()
+	Business.DonateCheckInit()
 	core.StartCron()
 
 	// TwitchBot 啟動
@@ -86,8 +86,15 @@ func readBotSetting() {
 	file.Close()
 
 	// 印出開關
-	ErrorHandle.Info.Printf("開關-斗內檢查: %v\n", model.BotSetting.Opay.CheckDonate)
-	ErrorHandle.Info.Printf("開關-八七集氣: %v\n", model.BotSetting.GatheringEvent.GatheringSwitch)
+	if model.BotSetting.Opay.CheckDonate {
+		ErrorHandle.Info.Printf("開關-斗內檢查-歐富寶: %v\n", model.BotSetting.Opay.CheckDonate)
+	}
+	if model.BotSetting.Ecpay.CheckDonate {
+		ErrorHandle.Info.Printf("開關-斗內檢查-綠界: %v\n", model.BotSetting.Ecpay.CheckDonate)
+	}
+	if model.BotSetting.GatheringEvent.GatheringSwitch {
+		ErrorHandle.Info.Printf("開關-八七集氣: %v\n", model.BotSetting.GatheringEvent.GatheringSwitch)
+	}
 
 	if model.BotSetting.GatheringEvent.GatheringSwitch {
 		levelPoint := map[int]int{

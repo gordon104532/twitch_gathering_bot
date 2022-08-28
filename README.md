@@ -1,4 +1,4 @@
-# 歐法機器人
+# 集氣機器人
 
 ## 功能項目
 1. 歐富寶檢查機器人
@@ -55,6 +55,11 @@ botSetting.txt
     "general":{
         "targetTwitchID":"ofadoraifu"
     },
+    "ecpay":{
+        "checkDonate": true,
+        "ecpayID":"B67298CA5A8DC54726A7776642B4AF70",
+        "ecpayMsg":"/me 感謝 %s 贊助了 %d 元, %s"
+    },
     "opay":{
             "checkDonate": true,
             "opayID":"7BF5D2184771810862F90707199",
@@ -68,9 +73,10 @@ botSetting.txt
     },
     "gatheringEvent":{
         "gatheringSwitch": true,
-        "subPoint": 100,
+        "subPoint": 150,
         "cheerPoint": 1,
-        "opayPoint": 1,
+        "opayPoint": 3,
+        "ecpayPoint": 3,
         "levelSetting":{
             "lv1":87,
             "lv2":587,
@@ -141,11 +147,16 @@ twitchOAth
 ### 正式版 87Bot_v1(v5) 
 - 移除自動打招呼功能
 - 移除perRoll功能 在紀錄中寫入"可抽"訊息
-- index.tmpl 改由程式建出，bootstrap從網路載(不需要app資料夾了)
+- index.tmpl 改由程式建出，引入bootstrap從網路載(不需要app資料夾了)
 - 八七集氣條中的文字大一咪咪
-
-    <link rel="stylesheet" href="/assetPath/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/assetPath/css/bootstrap-grid.min.css">
-    <link rel="stylesheet" href="/assetPath/css/bootstrap-reboot.min.css">
-    <script rel="script" src="/assetPath/js/bootstrap.bundle.js"></script>
     
+### 87Bot_v1.1 
+- 新增綠界斗內檢查(設定檔新增Ecpay類別、ecpayPoint綠界倍率)
+- 斗內檢查由三秒改為五秒一次
+- 修正:歐富寶斗內、綠界斗內、訂閱後總分沒寫為botSetting.text的問題
+- 註1:主播若不需綠界檢查，可以更新87Bot.exe就好 (botSetting可照舊)
+- 註2:若有遇到bot被防毒軟體移除的問題，請將放機器人的資料夾暫時排除
+
+### 87Bot_v1.2
+- 斗內檢查由五秒改為四秒一次 (五秒會被windows defender 判定為有害軟體)
+- 修正:寫回總分會跑出自動安安設定的問題

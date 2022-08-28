@@ -12,11 +12,14 @@ import (
 func StartCron() {
 	c := cron.New()
 	ErrorHandle.Info.Printf("背景啟動\n")
-	c.AddFunc("@every 3s", func() {
+	c.AddFunc("@every 4s", func() {
 		if model.BotSetting.Opay.CheckDonate {
 			Business.GetOpayData()
-			TwitchBot.TwitchCron()
 		}
+		if model.BotSetting.Ecpay.CheckDonate {
+			Business.GetECpayData()
+		}
+		TwitchBot.TwitchCron()
 	})
 
 	c.Start()

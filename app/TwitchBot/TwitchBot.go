@@ -19,7 +19,7 @@ func Init() {
 	//初始化活動檔案
 	InitGatheringFile()
 	InitExpSettingFile()
-	InitIindexFile()
+	InitIndexFile()
 
 	SendMsgQueue = make([]string, 0)
 

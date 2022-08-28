@@ -15,18 +15,24 @@ type BotSettingModel struct {
 		OpayCookie  string `json:"opayCookie"`
 		OpayMsg     string `json:"opayMsg"`
 	} `json:"opay"`
+	Ecpay struct {
+		CheckDonate bool   `json:"checkDonate"`
+		EcpayID     string `json:"ecpayID"`
+		EcpayMsg    string `json:"ecpayMsg"`
+	} `json:"ecpay"`
 	Twitch struct {
-		ChatTwitchID   string `json:"chatTwitchID"`
-		TwitchOAth     string `json:"twitchOAth"`
-		AutoHello      bool   `json:"autoHello"`
-		AutoHelloMsg   string `json:"autoHelloMsg"`
-		AutoHelloEmoji string `json:"autoHelloEmoji"`
+		ChatTwitchID string `json:"chatTwitchID"`
+		TwitchOAth   string `json:"twitchOAth"`
+		// AutoHello      bool   `json:"autoHello"`
+		// AutoHelloMsg   string `json:"autoHelloMsg"`
+		// AutoHelloEmoji string `json:"autoHelloEmoji"`
 	} `json:"twitch"`
 	GatheringEvent struct {
 		GatheringSwitch bool `json:"gatheringSwitch"`
 		SubPoint        int  `json:"subPoint"`
 		CheerPoint      int  `json:"cheerPoint"`
 		OpayPoint       int  `json:"opayPoint"`
+		EcpayPoint      int  `json:"ecpayPoint"`
 		LevelSetting    struct {
 			Lv1  int `json:"lv1"`
 			Lv2  int `json:"lv2"`

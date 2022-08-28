@@ -166,7 +166,7 @@ func InitExpSettingFile() {
 }
 
 // 初始化index檔
-func InitIindexFile() {
+func InitIndexFile() {
 	filename := "index.tmpl"
 
 	if _, err := os.Stat(filename); err == nil {
@@ -219,21 +219,23 @@ func InitIindexFile() {
 	} else {
 		// Schrodinger: file may or may not exist. See err for details.
 		// Therefore, do *NOT* use !os.IsNotExist(err) to test for file existence
-		ErrorHandle.Info.Printf("InitIindexFile else err: %v\n", err)
+		ErrorHandle.Info.Printf("InitIndexFile else err: %v\n", err)
 	}
 }
 
 // 活動紀錄
 func GatLog(event, alias, memo string, point int) {
 	now := time.Now().Format("01/02 15:04:05")
-	messeg := fmt.Sprintf("[%s] 事件:%s, 暱稱:%s, 分數:%d, 總分: %d, 備註: %s", now, event, alias, point, model.BotSetting.GatheringEvent.InitPoint, memo)
-	pointLogger.Println(messeg)
+	message := fmt.Sprintf("[%s] 事件:%s, 暱稱:%s, 分數:%d, 總分: %d, 備註: %s", now, event, alias, point, model.BotSetting.GatheringEvent.InitPoint, memo)
+	pointLogger.Println(message)
+	// 寫回總分
+	UpdateBotSetting()
 }
 
 // 檢查升級
 func GatheringCheckLevelUp() (isLevelup bool, levelUpMsg, checkMsg string, newLevel, basePoint, nextPoint int) {
 	newLevel, basePoint, nextPoint = 0, 0, 0
-	nowpoint := model.BotSetting.GatheringEvent.InitPoint
+	nowPoint := model.BotSetting.GatheringEvent.InitPoint
 	levelPoint := map[int]int{
 		0:  0,
 		1:  model.BotSetting.GatheringEvent.LevelSetting.Lv1,
@@ -250,7 +252,7 @@ func GatheringCheckLevelUp() (isLevelup bool, levelUpMsg, checkMsg string, newLe
 	}
 
 	for i := 0; i < 12; i++ {
-		if nowpoint < levelPoint[i] {
+		if nowPoint < levelPoint[i] {
 			newLevel = i - 1
 			basePoint = levelPoint[i-1]
 			nextPoint = levelPoint[i]
@@ -269,16 +271,28 @@ func GatheringCheckLevelUp() (isLevelup bool, levelUpMsg, checkMsg string, newLe
 }
 
 // 歐富寶加分
-func GatheringOpayPoint(opayName string, opayValue int) {
-	addPoint := opayValue * model.BotSetting.GatheringEvent.OpayPoint
+func GatheringDonatePoint(platform, donorName string, donorValue int) {
+	var addPoint int
+	switch platform {
+	case "opay":
+		{
+			addPoint = donorValue * model.BotSetting.GatheringEvent.OpayPoint
+		}
+	case "ecpay":
+		{
+			addPoint = donorValue * model.BotSetting.GatheringEvent.EcpayPoint
+		}
+	}
+
 	model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint + addPoint
 
-	//活動紀錄
-	GatLog("歐富寶", opayName, fmt.Sprintf("金額:%d", opayValue), addPoint)
-
+	if addPoint > 0 {
+		//活動紀錄
+		GatLog(platform, donorName, fmt.Sprintf("金額:%d", donorValue), addPoint)
+	}
 	// 檢查升級
-	isLevelup, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
-	if isLevelup {
+	isLevelUp, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
+	if isLevelUp {
 		SendMessage(levelUpMsg)
 	}
 }
@@ -311,7 +325,6 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 				month = giftCount
 				event = event + fmt.Sprintf("*%d", giftCount)
 			}
-
 		case "resub":
 			event = "續訂閱"
 			switch message.MsgParams["msg-param-multimonth-duration"] {
@@ -435,9 +448,6 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 			go cdCoolDown()
 		}
 
-	} else {
-		// 寫回總分
-		UpdateBotSetting()
 	}
 
 	return
