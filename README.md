@@ -1,10 +1,16 @@
 # 集氣機器人
-
+[87集器活動-宣傳頁](https://sites.google.com/view/87cheerup/%E9%A6%96%E9%A0%81?authuser=0)
 ## 功能項目
-1. 歐富寶檢查機器人
-2. 自動打招呼
+1. 歐富寶檢查
+2. 綠界檢查
+3. 小奇點計分
+4. 圖奇訂閱事件計分
+5. 計分紀錄
+6. 詳細分數倍率設定檔
+7. 顯示集氣條進度
 
-## 打包
+~~自動打招呼功能~~ 正式版移除
+## 打包指令
 - go build -mod=mod -o 87Bot_v1.exe
 - 64-bit
 > $ GOOS=darwin GOARCH=amd64 go build -o bin/app-amd64-darwin 87Bot_v1
@@ -12,11 +18,12 @@
 ## 使用說明
 1. 解壓縮 (主程式\設定檔\source Code)
 2. 把 主程式\設定檔 放在相同資料夾下(或是都丟在桌面)
-3. 打開設定檔 編輯下opayID 與 twitchOAth 的內容(如下)
+3. 打開設定檔 編輯下opayID 與 twitchOAth 等內容(如下)
 4. 點兩下主程式，看到"背景啟動" 與 "加入Twitch頻道"  且沒有其他錯誤訊息就可以了
 5.  source Code 沒有用 跟我一樣
 
-＊如果主程式被防毒軟體殺掉，請就救救他
+＊如果主程式被防毒軟體殺掉，請就救救他(設定排除路徑)
+詳細使用說明請看 /doc/bot使用教學.md
 
 ## 設定檔說明 點開來編輯內容就可以了
 botSetting.txt
@@ -48,28 +55,30 @@ botSetting.txt
     > 小奇點加分倍率(aka一點加幾分)
 - opayPoint
     > 歐富寶加分倍率(aka一塊加幾分)
+- ecpayPoint
+    > 綠界加分倍率(aka一塊加幾分)
 - initPoint
     > bot啟動時初始分數，後續加分也會持續寫入這一欄
 ```
 {
     "general":{
-        "targetTwitchID":"ofadoraifu"
-    },
-    "ecpay":{
-        "checkDonate": true,
-        "ecpayID":"B67298CA5A8DC54726A7776642B4AF70",
-        "ecpayMsg":"/me 感謝 %s 贊助了 %d 元, %s"
+        "targetTwitchID":""
     },
     "opay":{
             "checkDonate": true,
-            "opayID":"7BF5D2184771810862F90707199",
+            "opayID":"",
             "opayToken":"4jR8bmQj%2FyIxCbuczdpPhRFCTTOCGOStfu9laNR9RT1L3ZUgBvJFe9iJtkB%2FIIhCPpNxDwSSaOAqoxxvNOXm7RgGG1200uwIoZPib%2BNiE5%2FQwtaFkYC2wLLIFmMrCqbpMYQFjr6BMLYPJMDdm%2BIvrLBKuKo%3D",
             "opayCookie":"YlSbHQpkKPWeyFc6CVnOZ5skpidCYIxvjK4aCaGs40CCgs9pU/hRDbF3aWzf5QHT/k+p1BFd634KTum6IDkvYsIBsyubKneBuQKHkmo4mu9Vl0LxDYO/8SEFYGo/kHenXUXYbXmsvn9yrE6u5y39uZzak54=",
             "opayMsg":"/me 感謝 %s 贊助了 %d 元, %s"
     },
+    "ecpay":{
+            "checkDonate": true,
+            "ecpayID":"",
+            "ecpayMsg":"/me 感謝 %s 贊助了 %d 元, %s"
+    },
     "twitch":{
-        "chatTwitchID":"ofadoraifu",
-        "twitchOAth":"oauth:ijf94mqvg2x0u7mv8n7keidwo"
+        "chatTwitchID":"",
+        "twitchOAth":""
     },
     "gatheringEvent":{
         "gatheringSwitch": true,
