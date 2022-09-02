@@ -9,6 +9,7 @@ import (
 )
 
 func Router() {
+	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 
 	// r.Use(gin.Logger())

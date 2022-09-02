@@ -315,16 +315,17 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 			case "12":
 				month = model.DetailSetting.Subgift.Twelve
 			}
-		case "submysterygift":
-			event = "贈訂閱"
-			giftCount, err := strconv.Atoi(message.MsgParams["msg-param-mass-gift-count"])
-			if err != nil {
-				ErrorHandle.Error.Printf("贈訂加分失敗，請後續開botSetting直接在initPoint加分 並重啟bot: %s", message.SystemMsg)
-			} else {
-				// 其實是贈訂份數
-				month = giftCount
-				event = event + fmt.Sprintf("*%d", giftCount)
-			}
+		// 社群贈訂submysterygift後 仍會跳subgift 事件造成重複計分
+		// case "submysterygift":
+		// 	event = "贈訂閱"
+		// 	giftCount, err := strconv.Atoi(message.MsgParams["msg-param-mass-gift-count"])
+		// 	if err != nil {
+		// 		ErrorHandle.Error.Printf("贈訂加分失敗，請後續開botSetting直接在initPoint加分 並重啟bot: %s", message.SystemMsg)
+		// 	} else {
+		// 		// 其實是贈訂份數
+		// 		month = giftCount
+		// 		event = event + fmt.Sprintf("*%d", giftCount)
+		// 	}
 		case "resub":
 			event = "續訂閱"
 			switch message.MsgParams["msg-param-multimonth-duration"] {
