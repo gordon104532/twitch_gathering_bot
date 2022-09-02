@@ -11,7 +11,7 @@
 
 ~~自動打招呼功能~~ 正式版移除
 ## 打包指令
-- go build -mod=mod -o 87Bot_v1.exe
+- go build -mod=mod -o 87Bot_v1.3.exe
 - 64-bit
 > $ GOOS=darwin GOARCH=amd64 go build -o bin/app-amd64-darwin 87Bot_v1
 
@@ -20,7 +20,7 @@
 2. 把 主程式\設定檔 放在相同資料夾下(或是都丟在桌面)
 3. 打開設定檔 編輯下opayID 與 twitchOAth 等內容(如下)
 4. 點兩下主程式，看到"背景啟動" 與 "加入Twitch頻道"  且沒有其他錯誤訊息就可以了
-5.  source Code 沒有用 跟我一樣
+5. source Code 沒有用 跟我一樣
 
 ＊如果主程式被防毒軟體殺掉，請就救救他(設定排除路徑)
 詳細使用說明請看 /doc/bot使用教學.md
@@ -172,5 +172,7 @@ twitchOAth
 
 ### 87Bot_v1.3
 - [Fixed] 社群贈訂事件後，仍會跳贈訂事件，導致重複計分
-- 執行bot後，不會跳看不懂的集氣條相關log(比較整齊)
-- 結束bot要等約五秒後才關閉是正常現象。
+- [Changed] 執行bot後，不會跳看不懂的集氣條相關log(比較整齊)
+- ! 結束bot要等約五秒後才關閉是正常現象
+- [Fixed] 手動+分-分只認可設定檔中chatTwitchID的帳號操作。改成也認可設定檔中的targetTwitchID
+- [Changed] 設定檔格式有誤與設定檔無法開啟，顯示錯誤訊息而非閃退

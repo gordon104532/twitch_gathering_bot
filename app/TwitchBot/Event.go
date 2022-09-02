@@ -233,7 +233,7 @@ func GatLog(event, alias, memo string, point int) {
 }
 
 // 檢查升級
-func GatheringCheckLevelUp() (isLevelup bool, levelUpMsg, checkMsg string, newLevel, basePoint, nextPoint int) {
+func GatheringCheckLevelUp() (isLevelUp bool, levelUpMsg, checkMsg string, newLevel, basePoint, nextPoint int) {
 	newLevel, basePoint, nextPoint = 0, 0, 0
 	nowPoint := model.BotSetting.GatheringEvent.InitPoint
 	levelPoint := map[int]int{
@@ -265,7 +265,7 @@ func GatheringCheckLevelUp() (isLevelup bool, levelUpMsg, checkMsg string, newLe
 	if newLevel > model.GatheringLevel {
 		levelUpMsg = fmt.Sprintf("八七升級！目前集氣等級Lv.%d", newLevel)
 		model.GatheringLevel = newLevel
-		isLevelup = true
+		isLevelUp = true
 	}
 	return
 }
@@ -372,8 +372,8 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 		}
 
 		// 檢查升級
-		isLevelup, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
-		if isLevelup {
+		isLevelUp, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
+		if isLevelUp {
 			client.Say(message.Channel, levelUpMsg)
 		}
 	}
@@ -394,6 +394,7 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 
 				if err != nil {
 					ErrorHandle.Error.Printf("小奇點加分失敗，請手動換算與加分: %s", message.Message)
+					return
 				} else {
 					addPoint = cheerPoint * model.BotSetting.GatheringEvent.CheerPoint
 					model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint + addPoint
@@ -405,26 +406,27 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 		}
 
 		// 檢查升級
-		isLevelup, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
-		if isLevelup {
+		isLevelUp, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
+		if isLevelUp {
 			context = levelUpMsg
 		}
 	}
 
-	if strings.Contains(message.User.Name, model.BotSetting.Twitch.ChatTwitchID) {
+	if strings.Contains(message.User.Name, model.BotSetting.Twitch.ChatTwitchID) || strings.Contains(message.User.Name, model.BotSetting.General.TargetTwitchID) {
 		if strings.Contains(message.Message, "+") {
 			t := strings.Replace(message.Message, "+", "", -1)
 			manualPoint, err := strconv.Atoi(t)
 			if err != nil {
-				ErrorHandle.Error.Printf("手動加分失敗，請後續開botSetting直接在initPoint加分 並重啟bot: %s", message.Message)
+				ErrorHandle.Error.Printf("手動加分失敗，請後續開botSetting直接在initPoint加分 並重啟bot: %s\nerr:%v", message.Message, err)
+				return
 			} else {
 				model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint + manualPoint
 			}
 			//活動紀錄
 			GatLog("手動加", message.User.DisplayName, "", manualPoint)
 			// 檢查升級
-			isLevelup, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
-			if isLevelup {
+			isLevelUp, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
+			if isLevelUp {
 				context = levelUpMsg
 			}
 		}
@@ -433,7 +435,8 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 			t := strings.Replace(message.Message, "-", "", -1)
 			manualPoint, err := strconv.Atoi(t)
 			if err != nil {
-				ErrorHandle.Error.Printf("手動減分失敗，請後續開botSetting直接在initPoint減分 並重啟bot: %s", message.Message)
+				ErrorHandle.Error.Printf("手動減分失敗，請後續開botSetting直接在initPoint減分 並重啟bot: %s\nerr:%v", message.Message, err)
+				return
 			} else {
 				model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint - manualPoint
 			}

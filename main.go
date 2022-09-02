@@ -63,7 +63,8 @@ func readBotSetting() {
 
 	//handle errors while opening
 	if err != nil {
-		log.Fatalf("Error when opening file: %s", err)
+		ErrorHandle.Error.Printf("botSetting 開啟失敗，請檢查設定檔並重啟bot\nerr:%v\n", err)
+		fmt.Scanln()
 	}
 
 	fileScanner := bufio.NewScanner(file)
@@ -75,7 +76,9 @@ func readBotSetting() {
 
 	err = json.Unmarshal([]byte(tempStr), &model.BotSetting)
 	if err != nil {
-		log.Fatalf("json.Unmarshal: %s", err)
+		ErrorHandle.Error.Printf("botSetting 內容解析失敗，請檢查設定檔並重啟bot\nerr:%v\n", err)
+		fmt.Scanln()
+		// log.Fatalf("json.Unmarshal: %s", err)
 	}
 
 	// handle first encountered error while reading
