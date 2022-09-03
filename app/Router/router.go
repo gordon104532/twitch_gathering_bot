@@ -1,6 +1,7 @@
 package Router
 
 import (
+	"main/app/ErrorHandle"
 	"main/app/TwitchBot"
 	"main/app/model"
 	"net/http"
@@ -9,6 +10,13 @@ import (
 )
 
 func Router() {
+	defer func() {
+		if x := recover(); x != nil {
+			// recovering from a panic; x contains whatever was passed to panic()
+			ErrorHandle.Panic.Printf("機器人遇到預期外的錯誤。\n請截圖送到DC，並先重啟機器人。\nerr: %v", x)
+		}
+	}()
+
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
 

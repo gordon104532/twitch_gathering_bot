@@ -10,12 +10,14 @@ var (
 	Info    *log.Logger
 	Warning *log.Logger
 	Error   *log.Logger
+	Panic   *log.Logger
 )
 
 func Init(
 	infoHandle io.Writer,
 	warningHandle io.Writer,
-	ErrorHandle io.Writer) {
+	ErrorHandle io.Writer,
+	PanicHandle io.Writer) {
 
 	Info = log.New(infoHandle,
 		"INFO: ",
@@ -27,6 +29,10 @@ func Init(
 
 	Error = log.New(ErrorHandle,
 		"ERROR: ",
+		log.Ldate|log.Ltime|log.Lshortfile)
+
+	Panic = log.New(PanicHandle,
+		"PANIC: ",
 		log.Ldate|log.Ltime|log.Lshortfile)
 }
 

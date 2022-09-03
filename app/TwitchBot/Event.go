@@ -389,322 +389,78 @@ func ContainsI(a string, b string) bool {
 	)
 }
 
+var bitPattern []string = []string{
+	"ripcheer",
+	"cheerwhal",
+	"cheer",
+	"biblethump",
+	"corgo",
+	"uni",
+	"showlove",
+	"party",
+	"seemsgood",
+	"pride",
+	"kappa",
+	"frankerz",
+	"heyguys",
+	"dansgame",
+	"elegiggle",
+	"trihard",
+	"kreygasm",
+	"4head",
+	"swiftrage",
+	"notlikethis",
+	"failfish",
+	"vohiyo",
+	"pjsalt",
+	"mrdestructoid",
+	"bday",
+	"shamrock",
+}
+
 func isBits(msg string) bool {
-	if ContainsI(msg, "Cheer") ||
-		ContainsI(msg, "BibleThump") ||
-		ContainsI(msg, "cheerwhal") ||
-		ContainsI(msg, "Corgo") ||
-		ContainsI(msg, "uni") ||
-		ContainsI(msg, "ShowLove") ||
-		ContainsI(msg, "Party") ||
-		ContainsI(msg, "SeemsGood") ||
-		ContainsI(msg, "Pride") ||
-		ContainsI(msg, "Kappa") ||
-		ContainsI(msg, "FrankerZ") ||
-		ContainsI(msg, "HeyGuys") ||
-		ContainsI(msg, "DansGame") ||
-		ContainsI(msg, "EleGiggle") ||
-		ContainsI(msg, "TriHard") ||
-		ContainsI(msg, "Kreygasm") ||
-		ContainsI(msg, "4Head") ||
-		ContainsI(msg, "SwiftRage") ||
-		ContainsI(msg, "NotLikeThis") ||
-		ContainsI(msg, "FailFish") ||
-		ContainsI(msg, "VoHiYo") ||
-		ContainsI(msg, "PJSalt") ||
-		ContainsI(msg, "MrDestructoid") ||
-		ContainsI(msg, "bday") ||
-		ContainsI(msg, "RIPCheer") ||
-		ContainsI(msg, "Shamrock") {
-		return true
+	for i := range bitPattern {
+		if strings.Contains(msg, bitPattern[i]) {
+			return true
+		}
 	}
 	return false
 }
 
 // 小奇點加分與手動加分
 func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (context string) {
-	if isBits(message.Message) {
-		strSlice := strings.Split(message.Message, " ")
+	// 開頭將原始訊息轉為小寫
+	rawMsg := strings.ToLower(message.Message)
+	if isBits(rawMsg) {
+		strSlice := strings.Split(rawMsg, " ")
 		for i := range strSlice {
 			if isBits(strSlice[i]) {
 				var cheerStr string
-				// 這兩個裡面還包含cheer 要比cheer早判斷
-				if ContainsI(strSlice[i], "RIPCheer") {
-					// cheerStr = strings.Replace(strings.ToLower(strSlice[i]), "ripcheer", "", -1)
+				var illegal bool
 
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "ripcheer")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("ripcheer") {
-						cheerStr = splitStr[1]
+				for p := range bitPattern {
+					if strings.Contains(strSlice[i], bitPattern[p]) {
+						splitStr := strings.Split(strings.ToLower(strSlice[i]), bitPattern[p])
+						if len(splitStr[1]) == len(strSlice[i])-len(bitPattern[p]) {
+							cheerStr = splitStr[1]
+							break
+						} else {
+							illegal = true
+							break
+						}
 					} else {
 						continue
 					}
-					goto PROCESS
 				}
-				if ContainsI(strSlice[i], "cheerwhal") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "cheerwhal")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("cheerwhal") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "Cheer") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "cheer")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("cheer") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "BibleThump") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "biblethump")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("biblethump") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "cheerwhal") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "cheerwhal")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("cheerwhal") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "Corgo") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "corgo")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("corgo") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "uni") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "uni")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("uni") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "ShowLove") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "showlove")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("showlove") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "Party") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "party")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("party") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "SeemsGood") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "seemsgood")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("seemsgood") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "Pride") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "pride")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("pride") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "Kappa") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "kappa")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("kappa") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "FrankerZ") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "frankerz")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("frankerz") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "HeyGuys") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "heyguys")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("heyguys") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "DansGame") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "dansgame")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("dansgame") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "EleGiggle") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "elegiggle")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("elegiggle") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "TriHard") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "trihard")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("trihard") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "Kreygasm") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "kreygasm")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("kreygasm") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "4Head") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "4head")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("4head") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "SwiftRage") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "swiftrage")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("swiftrage") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "NotLikeThis") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "notlikethis")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("notlikethis") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "FailFish") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "failfish")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("failfish") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "VoHiYo") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "vohiyo")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("vohiyo") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "PJSalt") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "pjsalt")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("pjsalt") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "MrDestructoid") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "mrdestructoid")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("mrdestructoid") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "bday") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "bday")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("bday") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
-				}
-				if ContainsI(strSlice[i], "Shamrock") {
-					splitStr := strings.Split(strings.ToLower(strSlice[i]), "shamrock")
-
-					if len(splitStr[1]) == len(strSlice[i])-len("shamrock") {
-						cheerStr = splitStr[1]
-					} else {
-						continue
-					}
-					goto PROCESS
+				if illegal {
+					break
 				}
 
-			PROCESS:
 				var addPoint = 0
 				// 剩餘下來的字段 非數字開頭 (不會是0開頭)
+				if len(cheerStr) == 0 {
+					continue
+				}
 				firstDigit := cheerStr[:1]
 				switch firstDigit {
 				case "1", "2", "3", "4", "5", "6", "7", "8", "9":

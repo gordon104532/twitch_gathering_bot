@@ -16,6 +16,13 @@ var SendMsgQueue []string
 var TwitchClient *twitch.Client
 
 func Init() {
+	defer func() {
+		if x := recover(); x != nil {
+			// recovering from a panic; x contains whatever was passed to panic()
+			ErrorHandle.Panic.Printf("機器人遇到預期外的錯誤。\n請截圖送到DC，並先重啟機器人。\nerr: %v", x)
+		}
+	}()
+
 	//初始化活動檔案
 	InitGatheringFile()
 	InitExpSettingFile()

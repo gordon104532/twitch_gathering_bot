@@ -21,7 +21,7 @@ import (
 
 func main() {
 	// 初始化log
-	ErrorHandle.Init(os.Stdout, os.Stdout, os.Stderr)
+	ErrorHandle.Init(os.Stdout, os.Stdout, os.Stderr, os.Stderr)
 
 	// 監聽外部輸入已關閉
 	runtime.GOMAXPROCS(runtime.NumCPU())
