@@ -299,7 +299,7 @@ func GatheringDonatePoint(platform, donorName string, donorValue int) {
 
 // 活動訂閱分數處理
 func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
-	if message.MsgID == "subgift" || message.MsgID == "resub" || message.MsgID == "sub" || message.MsgID == "submysterygift" {
+	if message.MsgID == "subgift" || message.MsgID == "resub" || message.MsgID == "sub" { // || message.MsgID == "submysterygift"
 		var event string
 		var month, tier int = 1, 1
 		switch message.MsgID {
@@ -382,26 +382,349 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 // 八七指令CD時間
 var commandCD bool = true
 
+func ContainsI(a string, b string) bool {
+	return strings.Contains(
+		strings.ToLower(a),
+		strings.ToLower(b),
+	)
+}
+
+func isBits(msg string) bool {
+	if ContainsI(msg, "Cheer") ||
+		ContainsI(msg, "BibleThump") ||
+		ContainsI(msg, "cheerwhal") ||
+		ContainsI(msg, "Corgo") ||
+		ContainsI(msg, "uni") ||
+		ContainsI(msg, "ShowLove") ||
+		ContainsI(msg, "Party") ||
+		ContainsI(msg, "SeemsGood") ||
+		ContainsI(msg, "Pride") ||
+		ContainsI(msg, "Kappa") ||
+		ContainsI(msg, "FrankerZ") ||
+		ContainsI(msg, "HeyGuys") ||
+		ContainsI(msg, "DansGame") ||
+		ContainsI(msg, "EleGiggle") ||
+		ContainsI(msg, "TriHard") ||
+		ContainsI(msg, "Kreygasm") ||
+		ContainsI(msg, "4Head") ||
+		ContainsI(msg, "SwiftRage") ||
+		ContainsI(msg, "NotLikeThis") ||
+		ContainsI(msg, "FailFish") ||
+		ContainsI(msg, "VoHiYo") ||
+		ContainsI(msg, "PJSalt") ||
+		ContainsI(msg, "MrDestructoid") ||
+		ContainsI(msg, "bday") ||
+		ContainsI(msg, "RIPCheer") ||
+		ContainsI(msg, "Shamrock") {
+		return true
+	}
+	return false
+}
+
 // 小奇點加分與手動加分
 func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (context string) {
-	if strings.Contains(message.Message, "Cheer") {
+	if isBits(message.Message) {
 		strSlice := strings.Split(message.Message, " ")
 		for i := range strSlice {
-			if strings.Contains(strSlice[i], "Cheer") {
-				var addPoint = 0
-				cheerStr := strings.Replace(strSlice[i], "Cheer", "", -1)
-				cheerPoint, err := strconv.Atoi(cheerStr)
+			if isBits(strSlice[i]) {
+				var cheerStr string
+				// 這兩個裡面還包含cheer 要比cheer早判斷
+				if ContainsI(strSlice[i], "RIPCheer") {
+					// cheerStr = strings.Replace(strings.ToLower(strSlice[i]), "ripcheer", "", -1)
 
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "ripcheer")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("ripcheer") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "cheerwhal") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "cheerwhal")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("cheerwhal") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "Cheer") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "cheer")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("cheer") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "BibleThump") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "biblethump")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("biblethump") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "cheerwhal") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "cheerwhal")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("cheerwhal") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "Corgo") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "corgo")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("corgo") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "uni") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "uni")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("uni") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "ShowLove") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "showlove")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("showlove") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "Party") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "party")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("party") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "SeemsGood") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "seemsgood")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("seemsgood") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "Pride") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "pride")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("pride") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "Kappa") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "kappa")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("kappa") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "FrankerZ") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "frankerz")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("frankerz") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "HeyGuys") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "heyguys")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("heyguys") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "DansGame") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "dansgame")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("dansgame") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "EleGiggle") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "elegiggle")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("elegiggle") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "TriHard") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "trihard")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("trihard") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "Kreygasm") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "kreygasm")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("kreygasm") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "4Head") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "4head")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("4head") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "SwiftRage") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "swiftrage")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("swiftrage") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "NotLikeThis") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "notlikethis")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("notlikethis") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "FailFish") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "failfish")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("failfish") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "VoHiYo") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "vohiyo")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("vohiyo") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "PJSalt") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "pjsalt")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("pjsalt") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "MrDestructoid") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "mrdestructoid")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("mrdestructoid") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "bday") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "bday")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("bday") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+				if ContainsI(strSlice[i], "Shamrock") {
+					splitStr := strings.Split(strings.ToLower(strSlice[i]), "shamrock")
+
+					if len(splitStr[1]) == len(strSlice[i])-len("shamrock") {
+						cheerStr = splitStr[1]
+					} else {
+						continue
+					}
+					goto PROCESS
+				}
+
+			PROCESS:
+				var addPoint = 0
+				// 剩餘下來的字段 非數字開頭 (不會是0開頭)
+				firstDigit := cheerStr[:1]
+				switch firstDigit {
+				case "1", "2", "3", "4", "5", "6", "7", "8", "9":
+				default:
+					// 偵測到第一位不為數字
+					continue
+				}
+
+				cheerPoint, err := strconv.Atoi(cheerStr)
 				if err != nil {
-					ErrorHandle.Error.Printf("小奇點加分失敗，請手動換算與加分: %s", message.Message)
-					return
+					ErrorHandle.Error.Printf("小奇點加分失敗，請確認圖奇是否有記入與手動換算/加分 有誤字段: %s\nerr:%v", strSlice[i], err)
 				} else {
 					addPoint = cheerPoint * model.BotSetting.GatheringEvent.CheerPoint
 					model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint + addPoint
 				}
 
-				//活動紀錄
-				GatLog("小奇點", message.User.DisplayName, fmt.Sprintf("%d點", cheerPoint), addPoint)
+				if addPoint > 0 {
+					//活動紀錄
+					GatLog("小奇點", message.User.DisplayName, fmt.Sprintf("%d點", cheerPoint), addPoint)
+				}
 			}
 		}
 
@@ -416,10 +739,14 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 		if strings.Contains(message.Message, "+") {
 			t := strings.Replace(message.Message, "+", "", -1)
 			manualPoint, err := strconv.Atoi(t)
+
 			if err != nil {
 				ErrorHandle.Error.Printf("手動加分失敗，請後續開botSetting直接在initPoint加分 並重啟bot: %s\nerr:%v", message.Message, err)
 				return
 			} else {
+				if manualPoint == 0 {
+					return
+				}
 				model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint + manualPoint
 			}
 			//活動紀錄
@@ -434,10 +761,17 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 		if strings.Contains(message.Message, "-") {
 			t := strings.Replace(message.Message, "-", "", -1)
 			manualPoint, err := strconv.Atoi(t)
+
+			if manualPoint == 0 {
+				return
+			}
 			if err != nil {
 				ErrorHandle.Error.Printf("手動減分失敗，請後續開botSetting直接在initPoint減分 並重啟bot: %s\nerr:%v", message.Message, err)
 				return
 			} else {
+				if manualPoint == 0 {
+					return
+				}
 				model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint - manualPoint
 			}
 			//活動紀錄
