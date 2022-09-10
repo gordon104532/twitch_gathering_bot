@@ -52,7 +52,7 @@ func Router() {
 			"endPoint":     endPoint,
 			"nowPoint":     model.BotSetting.GatheringEvent.InitPoint,
 			"level":        level,
-			"percent":      (model.BotSetting.GatheringEvent.InitPoint * 100) / endPoint,
+			"percent":      ((model.BotSetting.GatheringEvent.InitPoint - startPoint) * 100) / (endPoint - startPoint),
 			"titleColor":   model.DetailSetting.ProgressBar.TitleColor,
 			"barCollor":    model.DetailSetting.ProgressBar.BarCollor,
 			"barTxtCollor": model.DetailSetting.ProgressBar.BarTxtCollor,

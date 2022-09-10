@@ -11,7 +11,7 @@
 
 ~~自動打招呼功能~~ 正式版移除
 ## 打包指令
-- go build -mod=mod -o 87Bot_v1.3.exe
+- go build -mod=mod -o 87Bot_v1.4.exe
 - 64-bit
 > $ GOOS=darwin GOARCH=amd64 go build -o bin/app-amd64-darwin 87Bot_v1
 
@@ -179,9 +179,18 @@ twitchOAth
 - [Fixed] 修正社群贈訂沒刪乾淨，導致多算一個月分數的問題 (問題1、2是同問題)
 - [Fixed] 小奇點加分找到錯誤後，應要把整句處理完(Ex: Cheer10 Cheer20A Cheer30，結果要是10+30=40)，原本只會記錄到10 與errror便跳出
 - [Fixed] 修正貼圖字串包含Cheer被小奇點加分判斷到的問題 (問題5)
+- 1.3.1
 - [Fixed] 修正小寫cheer 沒有被記入的問題
 - [Fixed] 修正亂打200Cheer 卻可以加分的問題
 - [Added] 除Cheer外 新增25種小奇點表符判斷，並支援全小寫樣式 (問題3的延伸)
 - [Changed] 手動加減0分 不紀錄
 - [Changed] 小奇點加分錯誤，只記錄錯誤的字段而非原始整句
 - [Changed] 連續手動加減分，應要噴錯
+- 1.3.2
+- [Fixed] 哭哭饅頭貼圖被誤判為小奇點動作，造成數字檢查時Panic問題
+- [Changed] 於goRoutine中加入panic recover()，印出panic訊息並避免閃退
+- [Changed] 26種小奇點表符判斷改用迴圈跑，且全用小寫判斷而不是每次比較才轉小寫
+### 87Bot_v1.4
+- [Fixed] 修正集氣調顯示百分比錯誤
+- [無解] resub 單月、多月續訂，若以分享按鈕顯示會被視為 "舊的多月續訂"，暫時解決方法: ExpSetting.txt 中"resub":"zero": 0 改為1。讓舊的多月續訂也計分。
+- 目前觀察的確只有初次訂閱會自動跳訊息在聊天室，續訂會以按鈕方式讓觀眾決定何時要分享(但不是非常肯定)。
