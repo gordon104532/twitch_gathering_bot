@@ -114,6 +114,7 @@ func readBotSetting() {
 			10: model.BotSetting.GatheringEvent.LevelSetting.Lv10,
 		}
 
+		// 設定檔分數檢查
 		for i := 0; i < 10; i++ {
 			if levelPoint[i] > levelPoint[i+1] {
 				ErrorHandle.Error.Printf("八七集氣 等級設定有誤: lv.%d 比 lv.%d 小，請關閉bot並檢查設定檔\n", i+1, i)

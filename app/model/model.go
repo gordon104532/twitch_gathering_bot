@@ -55,9 +55,9 @@ type BotSettingModel struct {
 type DetailSettingModel struct {
 	CheckEmoji  string `json:"checkEmoji"`
 	ProgressBar struct {
-		TitleColor   string `json:"titleColor"`
-		BarCollor    string `json:"barCollor"`
-		BarTxtCollor string `json:"barTxtCollor"`
+		TitleColor  string `json:"titleColor"`
+		BarColor    string `json:"barColor"`
+		BarTxtColor string `json:"barTxtColor"`
 	} `json:"progressBar"`
 	Subgift struct {
 		One    int `json:"one"`

@@ -47,15 +47,15 @@ func Router() {
 			endPoint = 1
 		}
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
-			"title":        model.BotSetting.GatheringEvent.GatheringTitle,
-			"startPoint":   startPoint,
-			"endPoint":     endPoint,
-			"nowPoint":     model.BotSetting.GatheringEvent.InitPoint,
-			"level":        level,
-			"percent":      ((model.BotSetting.GatheringEvent.InitPoint - startPoint) * 100) / (endPoint - startPoint),
-			"titleColor":   model.DetailSetting.ProgressBar.TitleColor,
-			"barCollor":    model.DetailSetting.ProgressBar.BarCollor,
-			"barTxtCollor": model.DetailSetting.ProgressBar.BarTxtCollor,
+			"title":       model.BotSetting.GatheringEvent.GatheringTitle,
+			"startPoint":  startPoint,
+			"endPoint":    endPoint,
+			"nowPoint":    model.BotSetting.GatheringEvent.InitPoint,
+			"level":       level,
+			"percent":     ((model.BotSetting.GatheringEvent.InitPoint - startPoint) * 100) / (endPoint - startPoint),
+			"titleColor":  model.DetailSetting.ProgressBar.TitleColor,
+			"barColor":    model.DetailSetting.ProgressBar.BarColor,
+			"barTxtColor": model.DetailSetting.ProgressBar.BarTxtColor,
 		})
 	})
 

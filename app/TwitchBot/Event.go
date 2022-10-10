@@ -97,8 +97,8 @@ func InitExpSettingFile() {
 			"checkEmoji": "",
 			"progressBar":{
 				"titleColor":"#000000",
-				"barCollor":"",
-				"barTxtCollor": ""
+				"barColor":"",
+				"barTxtColor": ""
 			},
 			"subgift":{
 				"one": 1,
@@ -205,7 +205,7 @@ func InitIndexFile() {
 		<div style="text-align:center;">{{.title}}(Lv.{{.level}})</div>
 
 		<div class="progress" style="height: 25px;">
-		<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{.percent}}%; color:{{.barTxtCollor}} ;background-color: {{.barCollor}};font-size: larger;" aria-valuenow="{{.percent}}" aria-valuemin="0" aria-valuemax="100">目前: {{.nowPoint}}</div>
+		<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{.percent}}%; color:{{.barTxtColor}} ;background-color: {{.barColor}};font-size: larger;" aria-valuenow="{{.percent}}" aria-valuemin="0" aria-valuemax="100">目前: {{.nowPoint}}</div>
 		</div>
 
 		<div style="float:left;">{{.startPoint}}</div>

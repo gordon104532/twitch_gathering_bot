@@ -141,7 +141,7 @@ botSetting.txt
 - sub, subgift 可對多月份訂閱做倍數設定
 - resub zero 代表舊的多月續訂不算入集氣
 - tier 訂閱層級倍數設定
-- 集氣條插件 顏色設定titleColor(標題與目標分數)、barCollor(進度條顏色)、barTxtCollor(進度條上文字顏色)，可寫orange 或 色碼#ed42e5
+- 集氣條插件 顏色設定titleColor(標題與目標分數)、barColor(進度條顏色)、barTxtColor(進度條上文字顏色)，可寫orange 或 色碼#ed42e5
 
 * botSetting 有改結構 還請用新的
 * 集氣調改顏色 就不會有條紋動畫了 不是壞掉
