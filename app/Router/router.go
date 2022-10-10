@@ -47,7 +47,7 @@ func Router() {
 			endPoint = 1
 		}
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
-			"title":        "八七集氣挑戰",
+			"title":        model.BotSetting.GatheringEvent.GatheringTitle,
 			"startPoint":   startPoint,
 			"endPoint":     endPoint,
 			"nowPoint":     model.BotSetting.GatheringEvent.InitPoint,

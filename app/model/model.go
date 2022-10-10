@@ -28,11 +28,14 @@ type BotSettingModel struct {
 		// AutoHelloEmoji string `json:"autoHelloEmoji"`
 	} `json:"twitch"`
 	GatheringEvent struct {
-		GatheringSwitch bool `json:"gatheringSwitch"`
-		SubPoint        int  `json:"subPoint"`
-		CheerPoint      int  `json:"cheerPoint"`
-		OpayPoint       int  `json:"opayPoint"`
-		EcpayPoint      int  `json:"ecpayPoint"`
+		GatheringSwitch bool   `json:"gatheringSwitch"`
+		GatheringTitle  string `json:"gatheringTitle"`
+		QueryCommand    string `json:"queryCommand"`
+		SubPoint        int    `json:"subPoint"`
+		CheerPoint      int    `json:"cheerPoint"`
+		StampPoint      int    `json:"stampPoint"`
+		OpayPoint       int    `json:"opayPoint"`
+		EcpayPoint      int    `json:"ecpayPoint"`
 		LevelSetting    struct {
 			Lv1  int `json:"lv1"`
 			Lv2  int `json:"lv2"`

@@ -3,6 +3,7 @@ package TwitchBot
 import (
 	"main/app/ErrorHandle"
 	"main/app/model"
+	"time"
 
 	twitch "github.com/gempir/go-twitch-irc/v3"
 )
@@ -14,6 +15,7 @@ import (
 
 var SendMsgQueue []string
 var TwitchClient *twitch.Client
+var retryCount int = 0
 
 func Init() {
 	defer func() {
@@ -30,7 +32,7 @@ func Init() {
 
 	SendMsgQueue = make([]string, 0)
 
-	// or client := twitch.NewAnonymousClient() for an anonymous user (no write capabilities)
+	// 連線物件
 	TwitchClient = twitch.NewClient(model.BotSetting.Twitch.ChatTwitchID, model.BotSetting.Twitch.TwitchOAth)
 
 	TwitchClient.OnPrivateMessage(func(message twitch.PrivateMessage) {
@@ -41,6 +43,16 @@ func Init() {
 		twitchUserNoticeHandle(TwitchClient, message)
 	})
 
+	// 成功連線
+	TwitchClient.OnConnect(func() {
+		ErrorHandle.Info.Println("TwitchBot OnConnect")
+		retryCount = 0
+	})
+	// 重連事件
+	TwitchClient.OnReconnectMessage(func(message twitch.ReconnectMessage) {
+		ErrorHandle.Info.Println("TwitchBot Reconnect Success")
+	})
+
 	ErrorHandle.Info.Printf("加入Twitch頻道: %s \n", model.BotSetting.General.TargetTwitchID)
 	// 加入頻道
 	TwitchClient.Join(model.BotSetting.General.TargetTwitchID)
@@ -48,10 +60,18 @@ func Init() {
 	err := TwitchClient.Connect()
 	if err != nil {
 		ErrorHandle.Error.Println("TwitchBot Init error", err)
-	} else {
-		ErrorHandle.Info.Println("TwitchBot Start", err)
-	}
 
+		// 重新init TwitchBot
+		if retryCount < 10 {
+			time.Sleep(30 * time.Second)
+			retryCount++
+			ErrorHandle.Warning.Println("TwitchBot Reconnect Count : ", retryCount)
+			go Init()
+		} else {
+			// 重連失敗送警報
+			ErrorHandle.Error.Println("TwitchBot重連失敗。 檢查設定檔、重啟機器人", err)
+		}
+	}
 }
 
 // 把要傳的訊息queue起來
@@ -74,6 +94,7 @@ func TwitchCron() {
 	}
 }
 
+// 訊息處理
 func twitchMessageHandle(client *twitch.Client, message twitch.PrivateMessage) {
 	// 自動打招呼
 	var context string
@@ -87,7 +108,6 @@ func twitchMessageHandle(client *twitch.Client, message twitch.PrivateMessage) {
 	if len(context) > 1 {
 		client.Say(message.Channel, context)
 	}
-
 }
 
 // 使用者通知處理

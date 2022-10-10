@@ -20,7 +20,7 @@ import (
 
 func UpdateBotSetting() {
 
-	ErrorHandle.Info.Printf("總分異動: %d\n", model.BotSetting.GatheringEvent.InitPoint)
+	ErrorHandle.Info.Printf("總分異動為: %d\n", model.BotSetting.GatheringEvent.InitPoint)
 	msgJSON, _ := json.Marshal(model.BotSetting)
 	err := os.WriteFile("botSetting.txt", msgJSON, 0644)
 	if err != nil {
@@ -35,7 +35,8 @@ func InitGatheringFile() {
 	filename := "gatTotalPoint.txt"
 
 	if _, err := os.Stat(filename); err == nil {
-		// path/to/whatever exists
+		// path/to/whatever exists // 有檔案則離開
+		return
 	} else if errors.Is(err, os.ErrNotExist) {
 		_, err := os.Create(filename)
 		if err != nil {
@@ -62,6 +63,7 @@ CREATE:
 		}
 		ErrorHandle.Error.Printf("Failed to opening file: %v", err)
 	}
+
 	ErrorHandle.Info.Println("建立檔案:" + filename)
 	// 修改檔案權限
 	err = f.Chmod(0666)
@@ -79,7 +81,8 @@ func InitExpSettingFile() {
 	filename := "ExpSetting.txt"
 
 	if _, err := os.Stat(filename); err == nil {
-
+		// 有檔案則離開
+		return
 	} else if errors.Is(err, os.ErrNotExist) {
 		// 無檔則建立
 		_, err := os.Create(filename)
@@ -170,7 +173,8 @@ func InitIndexFile() {
 	filename := "index.tmpl"
 
 	if _, err := os.Stat(filename); err == nil {
-
+		// 有檔案則離開
+		return
 	} else if errors.Is(err, os.ErrNotExist) {
 		// 無檔則建立
 		_, err := os.Create(filename)
@@ -195,13 +199,13 @@ func InitIndexFile() {
 			<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 			<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-			<title>八七集氣條</title>
+			<title>{{.title}}</title>
 		</head>
 		<body style="color:{{.titleColor}};">
 		<div style="text-align:center;">{{.title}}(Lv.{{.level}})</div>
 
 		<div class="progress" style="height: 25px;">
-		<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{.percent}}%; color:{{.barTxtCollor}} ;background-color: {{.barCollor}};font-size: larger;" aria-valuenow="{{.percent}}" aria-valuemin="0" aria-valuemax="100">八七值: {{.nowPoint}}</div>
+		<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{.percent}}%; color:{{.barTxtCollor}} ;background-color: {{.barCollor}};font-size: larger;" aria-valuenow="{{.percent}}" aria-valuemin="0" aria-valuemax="100">目前: {{.nowPoint}}</div>
 		</div>
 
 		<div style="float:left;">{{.startPoint}}</div>
@@ -263,7 +267,7 @@ func GatheringCheckLevelUp() (isLevelUp bool, levelUpMsg, checkMsg string, newLe
 	checkMsg = fmt.Sprintf("目前進度Lv.%d  %d/%d %s", newLevel, model.BotSetting.GatheringEvent.InitPoint, nextPoint, model.DetailSetting.CheckEmoji)
 
 	if newLevel > model.GatheringLevel {
-		levelUpMsg = fmt.Sprintf("八七升級！目前集氣等級Lv.%d", newLevel)
+		levelUpMsg = fmt.Sprintf("目前等級Lv.%d", newLevel)
 		model.GatheringLevel = newLevel
 		isLevelUp = true
 	}
@@ -353,6 +357,14 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 			case "12":
 				month = model.DetailSetting.Sub.Twelve
 			}
+		case "midnightsquid": // 超級貼圖
+
+			superStampProgress(client, message)
+
+		case "giftpaidupgrade":
+
+		case "communitypayforward":
+
 		}
 
 		switch message.MsgParams["msg-param-sub-plan"] {
@@ -367,9 +379,7 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 		addPoint := model.BotSetting.GatheringEvent.SubPoint * month * tier
 		model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint + addPoint
 
-		if addPoint > 0 {
-			GatLog(event, message.User.DisplayName, fmt.Sprintf("月數:%d 層級:%d", month, tier), addPoint)
-		}
+		GatLog(event, message.User.DisplayName, fmt.Sprintf("月數:%d 層級:%d", month, tier), addPoint)
 
 		// 檢查升級
 		isLevelUp, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
@@ -518,9 +528,6 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 			t := strings.Replace(message.Message, "-", "", -1)
 			manualPoint, err := strconv.Atoi(t)
 
-			if manualPoint == 0 {
-				return
-			}
 			if err != nil {
 				ErrorHandle.Error.Printf("手動減分失敗，請後續開botSetting直接在initPoint減分 並重啟bot: %s\nerr:%v", message.Message, err)
 				return
@@ -530,12 +537,14 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 				}
 				model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint - manualPoint
 			}
+
 			//活動紀錄
 			GatLog("手動減", message.User.DisplayName, "", manualPoint)
 		}
 	}
 
-	if strings.Contains(message.Message, "!87LV") || strings.Contains(message.Message, "!87lv") {
+	// 依設定檔指令做查詢
+	if strings.Contains(message.Message, model.BotSetting.GatheringEvent.QueryCommand) && model.BotSetting.GatheringEvent.QueryCommand != "" {
 		if commandCD {
 			_, _, context, _, _, _ = GatheringCheckLevelUp()
 			commandCD = false
@@ -551,4 +560,32 @@ func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (cont
 func cdCoolDown() {
 	time.Sleep(time.Second * 30)
 	commandCD = true
+}
+
+// 超級貼圖處理
+func superStampProgress(client *twitch.Client, message twitch.UserNoticeMessage) {
+	event := "贈貼圖"
+	rawAmount := message.MsgParams["msg-param-amount"]
+
+	amount, err := strconv.Atoi(rawAmount)
+	if err != nil {
+		ErrorHandle.Error.Printf("超級貼圖加分失敗: 原始金額:%s \nerr:%v", rawAmount, err)
+		return
+	}
+
+	showAmount := amount / 100
+	var addPoint int = 0
+	currency := message.MsgParams["msg-param-currency"]
+	if currency == "TWD" {
+		addPoint = showAmount * model.BotSetting.GatheringEvent.StampPoint
+	}
+
+	// 活動紀錄
+	GatLog(event, message.User.DisplayName, fmt.Sprintf("金額:%d 幣別:%s", showAmount, currency), addPoint)
+
+	// 檢查升級
+	isLevelUp, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
+	if isLevelUp {
+		client.Say(message.Channel, levelUpMsg)
+	}
 }

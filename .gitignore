@@ -1,4 +1,6 @@
 *.txt
 *.exe
 *.7z
+*.zip
 .docx
+/doc/事件範例.md
