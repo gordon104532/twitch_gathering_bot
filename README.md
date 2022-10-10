@@ -82,6 +82,9 @@ botSetting.txt
     },
     "gatheringEvent":{
         "gatheringSwitch": true,
+        "gatheringTitle": "活動名稱",
+        "queryCommand": "!進度",
+        "stampPoint": 3,
         "subPoint": 150,
         "cheerPoint": 1,
         "opayPoint": 3,
@@ -196,10 +199,15 @@ twitchOAth
 - 目前觀察的確只有初次訂閱會自動跳訊息在聊天室，續訂會以按鈕方式讓觀眾決定何時要分享(但不是非常肯定)。
 
 ### 87Bot_v1.5
-- twitch 斷線重連機制30秒一次 重連10次，重連log
-- 訂閱0分也紀錄(舊月續訂 或 多月)
-- 活動名稱、進度指令可自訂 "gatheringTitle":"活動名稱","queryCommand":"!進度"
-- 新的超級貼圖事件 與計分設定檔 gatheringEvent - stampPoint，一新台幣幾分。若是其他幣別則暫時記0分還請手動加分
-- 修正color拼錯字，影響靜態檔與設定檔
+- [Changed] 小奇點不用判斷貼圖了 有原生數字可用 
+- [Added] twitch 斷線重連機制30秒一次 重連10次，重連log
+- [Added] 接力贈訂事件 
+- [Added] 繼續使用贈禮訂閱事件
+- [Added] 活動名稱、進度指令可自訂 "gatheringTitle":"活動名稱","queryCommand":"!進度"
+- [Added] 新的超級貼圖事件 與計分設定檔 gatheringEvent - stampPoint，一新台幣幾分。若是其他幣別則暫時記0分還請手動加分
+- [Changed] 訂閱0分也紀錄(舊月續訂 或 多月)
+- [Changed] 小奇點*0分也紀錄
+- [Changed] Prime訂閱算層級一
+- [Changed] 修正color拼錯字，影響靜態檔與設定檔
 ### 未完成項目
 - 新的超級留言事件 與計分設定檔 (尚未找到怎麼抓)

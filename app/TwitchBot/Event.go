@@ -358,13 +358,17 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 				month = model.DetailSetting.Sub.Twelve
 			}
 		case "midnightsquid": // 超級貼圖
-
+			// 超級貼圖處理
 			superStampProgress(client, message)
 
-		case "giftpaidupgrade":
-
-		case "communitypayforward":
-
+		case "giftpaidupgrade": // 繼續使用贈禮訂閱
+			event = "繼續訂"
+			// 原生無相關資訊，預設層級一、一個月
+			month = model.DetailSetting.Sub.One
+		case "standardpayforward", "communitypayforward": // 接力贈訂
+			event = "接訂閱"
+			// 原生無相關資訊，預設層級一、一個月
+			month = model.DetailSetting.Sub.One
 		}
 
 		switch message.MsgParams["msg-param-sub-plan"] {
@@ -374,6 +378,8 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 			tier = model.DetailSetting.Tier.Two
 		case "3000":
 			tier = model.DetailSetting.Tier.Three
+		default:
+			tier = model.DetailSetting.Tier.One
 		}
 
 		addPoint := model.BotSetting.GatheringEvent.SubPoint * month * tier
@@ -399,100 +405,16 @@ func ContainsI(a string, b string) bool {
 	)
 }
 
-var bitPattern []string = []string{
-	"ripcheer",
-	"cheerwhal",
-	"cheer",
-	"biblethump",
-	"corgo",
-	"uni",
-	"showlove",
-	"party",
-	"seemsgood",
-	"pride",
-	"kappa",
-	"frankerz",
-	"heyguys",
-	"dansgame",
-	"elegiggle",
-	"trihard",
-	"kreygasm",
-	"4head",
-	"swiftrage",
-	"notlikethis",
-	"failfish",
-	"vohiyo",
-	"pjsalt",
-	"mrdestructoid",
-	"bday",
-	"shamrock",
-}
-
-func isBits(msg string) bool {
-	for i := range bitPattern {
-		if strings.Contains(msg, bitPattern[i]) {
-			return true
-		}
-	}
-	return false
-}
-
 // 小奇點加分與手動加分
 func cheerEventPoint(client *twitch.Client, message twitch.PrivateMessage) (context string) {
-	// 開頭將原始訊息轉為小寫
-	rawMsg := strings.ToLower(message.Message)
-	if isBits(rawMsg) {
-		strSlice := strings.Split(rawMsg, " ")
-		for i := range strSlice {
-			if isBits(strSlice[i]) {
-				var cheerStr string
-				var illegal bool
+	// 小奇點
+	if message.Bits != 0 {
+		var addPoint int = 0
+		addPoint = message.Bits * model.BotSetting.GatheringEvent.CheerPoint
+		model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint + addPoint
 
-				for p := range bitPattern {
-					if strings.Contains(strSlice[i], bitPattern[p]) {
-						splitStr := strings.Split(strings.ToLower(strSlice[i]), bitPattern[p])
-						if len(splitStr[1]) == len(strSlice[i])-len(bitPattern[p]) {
-							cheerStr = splitStr[1]
-							break
-						} else {
-							illegal = true
-							break
-						}
-					} else {
-						continue
-					}
-				}
-				if illegal {
-					break
-				}
-
-				var addPoint = 0
-				// 剩餘下來的字段 非數字開頭 (不會是0開頭)
-				if len(cheerStr) == 0 {
-					continue
-				}
-				firstDigit := cheerStr[:1]
-				switch firstDigit {
-				case "1", "2", "3", "4", "5", "6", "7", "8", "9":
-				default:
-					// 偵測到第一位不為數字
-					continue
-				}
-
-				cheerPoint, err := strconv.Atoi(cheerStr)
-				if err != nil {
-					ErrorHandle.Error.Printf("小奇點加分失敗，請確認圖奇是否有記入與手動換算/加分 有誤字段: %s\nerr:%v", strSlice[i], err)
-				} else {
-					addPoint = cheerPoint * model.BotSetting.GatheringEvent.CheerPoint
-					model.BotSetting.GatheringEvent.InitPoint = model.BotSetting.GatheringEvent.InitPoint + addPoint
-				}
-
-				if addPoint > 0 {
-					//活動紀錄
-					GatLog("小奇點", message.User.DisplayName, fmt.Sprintf("%d點", cheerPoint), addPoint)
-				}
-			}
-		}
+		//活動紀錄
+		GatLog("小奇點", message.User.DisplayName, fmt.Sprintf("%d點", message.Bits), addPoint)
 
 		// 檢查升級
 		isLevelUp, levelUpMsg, _, _, _, _ := GatheringCheckLevelUp()
