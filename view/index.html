@@ -1,0 +1,242 @@
+<!-- html -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+     content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- axios -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <!-- bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-p34f1UUtsS3wqzfto5wAAmdvj+osOnFyQFpp4Ua3gs/ZVWx6oOypYoCJhGGScy+8" crossorigin="anonymous"></script>
+  <!-- element 引入样式 -->
+  <!-- <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"> -->
+  <!-- element 引入组件库 -->
+  <!-- <script src="https://unpkg.com/element-ui/lib/index.js"></script> -->
+</head>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+<div>
+  <p>
+</div>
+<div id="setting-input">
+  <h3>主要設定</h3>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">目標Twitch</span>
+     <input v-model="setting.general.targetTwitchID" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="圖奇帳號">
+  </div>
+  <br>
+  <h3>歐富寶相關</h3>
+  <div class="form-check form-switch">
+     <input v-model="setting.opay.checkDonate" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+     <label class="form-check-label" for="flexSwitchCheckChecked">是否啟用檢查</label>
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">opayID</span>
+     <input v-model="setting.opay.opayID" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="ex: 7BF5D2184771810862F9070719909401">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">opayMsg</span>
+     <input v-model="setting.opay.opayMsg" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="ex: /me 感謝 %s 贊助了 %d 元, %s">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">opayToken</span>
+     <input v-model="setting.opay.opayToken" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" >
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">opayCookie</span>
+     <input v-model="setting.opay.opayCookie" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <br>
+  <h3>綠界相關</h3>
+  <div class="form-check form-switch">
+     <input v-model="setting.ecpay.checkDonate" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+     <label class="form-check-label" for="flexSwitchCheckChecked">是否啟用檢查</label>
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">ecpayID</span>
+     <input v-model="setting.ecpay.ecpayID" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="ex: EF382462D39404EADA212AF924B879C0">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">ecpayMsg</span>
+     <input v-model="setting.ecpay.ecpayMsg" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="ex: /me 感謝 %s 贊助了 %d 元, %s">
+  </div>
+  <br>
+  <h3>圖奇帳號相關</h3>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">發話者圖奇ID</span>
+     <input v-model="setting.twitch.chatTwitchID" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="圖奇帳號">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">發話者OAth金鑰</span>
+     <input v-model="setting.twitch.twitchOAth" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="ex: oauth:ijf94mqvg2x0u7mv8n7keidwoowk">
+  </div>
+  <br>
+  <h3>分數設定相關</h3>
+  <div class="form-check form-switch">
+     <input v-model="setting.gatheringEvent.gatheringSwitch" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" checked>
+     <label class="form-check-label" for="flexSwitchCheckChecked">是否啟用活動</label>
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">活動名稱</span>
+     <input v-model="setting.gatheringEvent.gatheringTitle" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" >
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">分數查詢指令</span>
+     <input v-model="setting.gatheringEvent.queryCommand" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="ex: !lv">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">訂閱基本分數</span>
+     <input v-model="setting.gatheringEvent.subPoint" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">小奇點基本分數</span>
+     <input v-model="setting.gatheringEvent.cheerPoint" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">超級貼圖基本分數</span>
+     <input v-model="setting.gatheringEvent.stampPoint" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">歐富寶基本分數</span>
+     <input v-model="setting.gatheringEvent.opayPoint" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">綠界基本分數</span>
+     <input v-model="setting.gatheringEvent.ecpayPoint" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <br>
+  <h4>各等級分數</h4>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">lv1</span>
+     <input v-model="setting.gatheringEvent.levelSetting.lv1" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">lv2</span>
+     <input v-model="setting.gatheringEvent.levelSetting.lv2" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">lv3</span>
+     <input v-model="setting.gatheringEvent.levelSetting.lv3" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">lv4</span>
+     <input v-model="setting.gatheringEvent.levelSetting.lv4" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">lv5</span>
+     <input v-model="setting.gatheringEvent.levelSetting.lv5" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">lv6</span>
+     <input v-model="setting.gatheringEvent.levelSetting.lv6" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">lv7</span>
+     <input v-model="setting.gatheringEvent.levelSetting.lv7" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">lv8</span>
+     <input v-model="setting.gatheringEvent.levelSetting.lv8" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">lv9</span>
+     <input v-model="setting.gatheringEvent.levelSetting.lv9" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">lv10</span>
+     <input v-model="setting.gatheringEvent.levelSetting.lv10" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <br>
+  <h4>服務起始分數</h4>
+  <div class="input-group mb-3">
+     <span class="input-group-text" id="inputGroup-sizing-default">總分</span>
+     <input v-model="setting.gatheringEvent.initPoint" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default">
+  </div>
+  <br>
+  <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+     <button class="btn btn-primary btn-lg me-md-2" type="button" v-on:click="apiUpdateSetting">儲存</button>
+     <button class="btn btn-secondary btn-lg" type="button" v-on:click="apiGetSetting">還原</button>
+  </div>
+</div>
+<!-- js -->
+<script>
+  var settingInput =new Vue({
+    el:'#setting-input',
+    data:{
+      setting:{
+        general:{
+          targetTwitchID:''
+        },
+        opay:{
+          checkDonate:true,
+          opayID:"7BF5D2184771810862F9070719909401",
+          opayMsg:"/me 感謝 %s 贊助了 %d 元, %s",
+          opayToken: "4jR8bmQj%2FyIxCbuczdpPhRFCTTOCGOStfu9laNR9RT1L3ZUgBvJFe9iJtkB%2FIIhCPpNxDwSSaOAqoxxvNOXm7RgGG1200uwIoZPib%2BNiE5%2FQwtaFkYC2wLLIFmMrCqbpMYQFjr6BMLYPJMDdm%2BIvrLBKuKo%3D",
+          opayCookie:"YlSbHQpkKPWeyFc6CVnOZ5skpidCYIxvjK4aCaGs40CCgs9pU/hRDbF3aWzf5QHT/k+p1BFd634KTum6IDkvYsIBsyubKneBuQKHkmo4mu9Vl0LxDYO/8SEFYGo/kHenXUXYbXmsvn9yrE6u5y39uZzak54=",
+        },
+        ecpay:{
+          checkDonate:true,
+          ecpayID:"EF382462D39404EADA212AF924B879C0",
+          ecpayMsg:"/me 感謝 %s 贊助了 %d 元, %s"
+        },
+        twitch:{
+          chatTwitchID:"",
+          twitchOAth:"oauth:ijf94mqvg2x0u7mv8n7keidwoowk"
+        },
+        gatheringEvent:{
+          gatheringSwitch:true,
+          gatheringTitle:"即棄",
+          queryCommand:"!87",
+          subPoint:0,
+          cheerPoint:0,
+          stampPoint:0,
+          opayPoint:0,
+          ecpayPoint:0,
+          levelSetting:{
+            lv1:10,
+            lv2:20,
+            lv3:30,
+            lv4:40,
+            lv5:50,
+            lv6:60,
+            lv7:70,
+            lv8:80,
+            lv9:90,
+            lv10:100,
+          }
+        },
+        initPoint:100 
+      }
+    },
+    methods: {
+      // 取得設定檔
+      apiGetSetting() {
+        axios
+        .get('/setting')
+        .then( response => {
+            this.setting  = response.data;
+          } 
+        )
+        .catch(function (error) { // 請求失敗處理
+          console.log("get setting err: "+error);
+        });
+      },
+
+      // 更新設定檔
+      apiUpdateSetting(){
+        axios
+        .post('/setting', JSON.stringify(this.setting))
+        .then(function (response) {
+          console.log(response.status);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }
+    },
+  
+    created(){
+      this.apiGetSetting()
+    }
+    });
+</script>

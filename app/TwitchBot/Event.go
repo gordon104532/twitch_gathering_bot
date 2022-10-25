@@ -372,7 +372,7 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 		}
 
 		switch message.MsgParams["msg-param-sub-plan"] {
-		case "1000":
+		case "1000", "Prime":
 			tier = model.DetailSetting.Tier.One
 		case "2000":
 			tier = model.DetailSetting.Tier.Two
@@ -395,7 +395,7 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 	}
 }
 
-// 八七指令CD時間
+// 查詢指令CD時間
 var commandCD bool = true
 
 func ContainsI(a string, b string) bool {

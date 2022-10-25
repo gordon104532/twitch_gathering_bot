@@ -19,9 +19,7 @@ func Router() {
 
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
-
 	// r.Use(gin.Logger())
-
 	r.Use(gin.Recovery())
 
 	//根目錄
@@ -36,9 +34,12 @@ func Router() {
 	// r.Static("/assetPath", "./app/asset")
 	// r.LoadHTMLGlob("./app/view/*")
 	r.LoadHTMLGlob("./*.tmpl")
+	r.LoadHTMLGlob("./view/*.html")
 
-	// init 做一次
+	// init 做一次確認等級
 	TwitchBot.GatheringCheckLevelUp()
+
+	// 進度條 // 60秒刷新一次
 	r.GET("/87", func(c *gin.Context) {
 		_, _, _, level, startPoint, endPoint := TwitchBot.GatheringCheckLevelUp()
 		model.GatheringLevel = level
@@ -57,6 +58,35 @@ func Router() {
 			"barColor":    model.DetailSetting.ProgressBar.BarColor,
 			"barTxtColor": model.DetailSetting.ProgressBar.BarTxtColor,
 		})
+	})
+
+	// 設定控制頁
+	r.GET("/control", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "index.html", nil)
+	})
+
+	// 取得基本設定
+	r.GET("/setting", func(c *gin.Context) {
+		c.JSON(http.StatusOK, model.BotSetting)
+	})
+
+	// 更新基本設定
+	r.POST("/setting", func(c *gin.Context) {
+		// copyCtx := c
+		// data, _ := copyCtx.GetRawData()
+		// fmt.Println(string(data))
+		var getSetting model.BotSettingModel
+		if err := c.ShouldBindJSON(&getSetting); err != nil {
+			c.JSON(500, gin.H{
+				"Code": 500,
+				"Msg":  err.Error(),
+			})
+			return
+		}
+
+		// 設定為全域參數
+		model.BotSetting = getSetting
+		c.String(http.StatusOK, "ok")
 	})
 
 	r.Run(":8787")
