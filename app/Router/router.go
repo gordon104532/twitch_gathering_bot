@@ -19,7 +19,7 @@ func Router() {
 
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
-	// r.Use(gin.Logger())
+	r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
 	//根目錄
@@ -34,7 +34,6 @@ func Router() {
 	// r.Static("/assetPath", "./app/asset")
 	// r.LoadHTMLGlob("./app/view/*")
 	r.LoadHTMLGlob("./*.tmpl")
-	r.LoadHTMLGlob("./view/*.html")
 
 	// init 做一次確認等級
 	TwitchBot.GatheringCheckLevelUp()
@@ -61,9 +60,11 @@ func Router() {
 	})
 
 	// 設定控制頁
-	r.GET("/control", func(c *gin.Context) {
-		c.HTML(http.StatusOK, "index.html", nil)
-	})
+	// r.LoadHTMLGlob("./view/*.html")
+	// r.GET("/control", func(c *gin.Context) {
+	// 	c.HTML(http.StatusOK, "index.html", nil)
+	// })
+	r.Static("/control", "./view")
 
 	// 取得基本設定
 	r.GET("/setting", func(c *gin.Context) {
@@ -86,6 +87,8 @@ func Router() {
 
 		// 設定為全域參數
 		model.BotSetting = getSetting
+		// 寫回檔案
+		TwitchBot.UpdateBotSetting()
 		c.String(http.StatusOK, "ok")
 	})
 
