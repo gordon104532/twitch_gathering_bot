@@ -19,7 +19,7 @@ func Router() {
 
 	gin.SetMode(gin.ReleaseMode)
 	r := gin.New()
-	r.Use(gin.Logger())
+	// r.Use(gin.Logger())
 	r.Use(gin.Recovery())
 
 	//根目錄
@@ -33,7 +33,7 @@ func Router() {
 
 	// r.Static("/assetPath", "./app/asset")
 	// r.LoadHTMLGlob("./app/view/*")
-	r.LoadHTMLGlob("./*.tmpl")
+	r.LoadHTMLGlob("./index.*")
 
 	// init 做一次確認等級
 	TwitchBot.GatheringCheckLevelUp()
@@ -64,7 +64,7 @@ func Router() {
 	// r.GET("/control", func(c *gin.Context) {
 	// 	c.HTML(http.StatusOK, "index.html", nil)
 	// })
-	r.Static("/control", "./view")
+	r.Static("/control", "./")
 
 	// 取得基本設定
 	r.GET("/setting", func(c *gin.Context) {
@@ -78,6 +78,7 @@ func Router() {
 		// fmt.Println(string(data))
 		var getSetting model.BotSettingModel
 		if err := c.ShouldBindJSON(&getSetting); err != nil {
+			ErrorHandle.Error.Println("更新基本設定 Err:", err)
 			c.JSON(500, gin.H{
 				"Code": 500,
 				"Msg":  err.Error(),

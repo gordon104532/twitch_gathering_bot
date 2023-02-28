@@ -11,9 +11,9 @@
 
 ~~自動打招呼功能~~ 正式版移除
 ## 打包指令
-- go build -mod=mod -o 87Bot_v1.4.exe
+- go build -mod=mod -o 87Bot_v1.6.exe
 - 64-bit
-> $ GOOS=darwin GOARCH=amd64 go build -o bin/app-amd64-darwin 87Bot_v1
+> Mac打包方式 $ GOOS=darwin GOARCH=amd64 go build -o bin/app-amd64-darwin 87Bot_v1
 
 ## 使用說明
 1. 解壓縮 (主程式\設定檔\source Code)
@@ -25,8 +25,9 @@
 ＊如果主程式被防毒軟體殺掉，請就救救他(設定排除路徑)
 詳細使用說明請看 /doc/bot使用教學.md
 
-## 設定檔說明 點開來編輯內容就可以了
-botSetting.txt
+## 設定檔說明 
+v1.6 版開始可從網頁進行設定 http://127.0.0.1:8787/control/
+> 舊有直接更改檔案方式仍可使用，更改後請重啟程式，botSetting.txt
 - targetTwitchID
     > 發話的圖奇頻道
 - chatTwitchID
@@ -66,14 +67,14 @@ botSetting.txt
     },
     "opay":{
             "checkDonate": true,
-            "opayID":"",
+            "opayID":"7BF5D2184771810862F9070719909401",
             "opayToken":"4jR8bmQj%2FyIxCbuczdpPhRFCTTOCGOStfu9laNR9RT1L3ZUgBvJFe9iJtkB%2FIIhCPpNxDwSSaOAqoxxvNOXm7RgGG1200uwIoZPib%2BNiE5%2FQwtaFkYC2wLLIFmMrCqbpMYQFjr6BMLYPJMDdm%2BIvrLBKuKo%3D",
             "opayCookie":"YlSbHQpkKPWeyFc6CVnOZ5skpidCYIxvjK4aCaGs40CCgs9pU/hRDbF3aWzf5QHT/k+p1BFd634KTum6IDkvYsIBsyubKneBuQKHkmo4mu9Vl0LxDYO/8SEFYGo/kHenXUXYbXmsvn9yrE6u5y39uZzak54=",
             "opayMsg":"/me 感謝 %s 贊助了 %d 元, %s"
     },
     "ecpay":{
             "checkDonate": true,
-            "ecpayID":"",
+            "ecpayID":"EF382462D39404EADA212AF924B879C0",
             "ecpayMsg":"/me 感謝 %s 贊助了 %d 元, %s"
     },
     "twitch":{
@@ -209,15 +210,25 @@ twitchOAth
 - [Changed] 小奇點*0分也紀錄
 - [Changed] Prime訂閱算層級一
 - [Changed] 修正color拼錯字，影響靜態檔與設定檔
+
 ### v1.6預定項目
-- [ ] 新的超級留言事件 與計分設定檔 (尚未找到怎麼抓)
 - [x] 網頁版設定頁面
 - [x] 讀取服務設定檔
 - [x] 寫入服務設定檔
-- [X] 寫入成功/失敗提示
+- [x] 寫入成功/失敗提示
+- [x] 修正寫入成功/失敗提示
+- [x] 修正int被axios傳出去變string的問題 => 送出前全部轉換一次
+- [x] 欄位標題寬度統一
+- [x] index.html index.tmpl 由bot產生
+- [x] botSetting設定檔由bot產生
+> 之後改控制頁 先改/bak/裡的index檔，再貼過去TwitchBot/Event.go裡
+> 之後改設定檔 先改Readme說明，再貼過去TwitchBot/Event.go裡
+
+待優化項目
+- [ ] 參數驗證(寫一個功能監聽變化來改變dom?)
 - [ ] 讀取細節設定檔
 - [ ] 寫入細節設定檔 
-優化項目
+- [ ] 新的超級留言事件 與計分設定檔 (尚未找到怎麼抓)
 - [ ] 輸入框標題底色方塊統一寬度
 - [ ] 設定頁區塊收納
 - [ ] html js css 檔案分開

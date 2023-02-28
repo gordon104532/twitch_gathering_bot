@@ -26,9 +26,10 @@ func Init() {
 	}()
 
 	//初始化活動檔案
-	InitGatheringFile()
-	InitExpSettingFile()
-	InitIndexFile()
+	InitGatheringFile()  // 總分
+	InitExpSettingFile() // 詳細設定
+	InitIndexFile()      // 進度條檔案
+	InitControlFile()    // 控制頁檔案
 
 	SendMsgQueue = make([]string, 0)
 

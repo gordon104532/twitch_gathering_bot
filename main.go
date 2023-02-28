@@ -36,9 +36,11 @@ func main() {
 	wg.Add(1)
 	ErrorHandle.Info.Printf("Ctrl+C兩次 或 按叉叉 以結束。\n\n")
 
+	// 檢查有無、產出設定檔
+	TwitchBot.InitBotSettingFile()
 	//讀取設定檔
 	readBotSetting()
-	ErrorHandle.Info.Printf("%s Bot Start\n", model.BotSetting.General.TargetTwitchID)
+	ErrorHandle.Info.Printf("%s Twitch Bot Start\n", model.BotSetting.General.TargetTwitchID)
 
 	// 啟用背景
 	Business.DonateCheckInit()
@@ -96,7 +98,7 @@ func readBotSetting() {
 		ErrorHandle.Info.Printf("開關-斗內檢查-綠界: %v\n", model.BotSetting.Ecpay.CheckDonate)
 	}
 	if model.BotSetting.GatheringEvent.GatheringSwitch {
-		ErrorHandle.Info.Printf("開關-八七集氣: %v\n", model.BotSetting.GatheringEvent.GatheringSwitch)
+		ErrorHandle.Info.Printf("開關-集氣功能: %v\n", model.BotSetting.GatheringEvent.GatheringSwitch)
 	}
 
 	if model.BotSetting.GatheringEvent.GatheringSwitch {
@@ -117,8 +119,8 @@ func readBotSetting() {
 		// 設定檔分數檢查
 		for i := 0; i < 10; i++ {
 			if levelPoint[i] > levelPoint[i+1] {
-				ErrorHandle.Error.Printf("八七集氣 等級設定有誤: lv.%d 比 lv.%d 小，請關閉bot並檢查設定檔\n", i+1, i)
-				fmt.Scanln()
+				ErrorHandle.Error.Printf("八七集氣 等級設定有誤: lv.%d 比 lv.%d 小，請檢查設定\n", i+1, i)
+				// fmt.Scanln()
 			}
 		}
 	}
