@@ -79,7 +79,11 @@ v1.6 版開始可從網頁進行設定 http://127.0.0.1:8787/control/
     },
     "twitch":{
         "chatTwitchID":"",
-        "twitchOAth":""
+        "twitchOAth":"",
+        "levelUpNotice": true
+        "autoHello":true,
+        "autoHelloMsg": "安安",
+        "autoHelloEmoji": "<3"
     },
     "gatheringEvent":{
         "gatheringSwitch": true,
@@ -218,17 +222,25 @@ twitchOAth
 - [x] 寫入成功/失敗提示
 - [x] 修正寫入成功/失敗提示
 - [x] 修正int被axios傳出去變string的問題 => 送出前全部轉換一次
-- [x] 欄位標題寬度統一
+- [x] 輸入框標題底色方塊統一寬度
 - [x] index.html index.tmpl 由bot產生
 - [x] botSetting設定檔由bot產生
+- [x] 升級通知開關
+- [x] 自動安安機器人復活
+- [x] 進度條底色可自訂，預設加深
 > 之後改控制頁 先改/bak/裡的index檔，再貼過去TwitchBot/Event.go裡
 > 之後改設定檔 先改Readme說明，再貼過去TwitchBot/Event.go裡
 
+
 待優化項目
-- [ ] 參數驗證(寫一個功能監聽變化來改變dom?)
+- [ ] 控制頁參數驗證(寫一個功能監聽變化來改變dom?)
 - [ ] 讀取細節設定檔
 - [ ] 寫入細節設定檔 
-- [ ] 新的超級留言事件 與計分設定檔 (尚未找到怎麼抓)
-- [ ] 輸入框標題底色方塊統一寬度
-- [ ] 設定頁區塊收納
+- [ ] 新的超級留言事件 與計分設定檔 (尚未找到怎麼抓) => 檢查是不是圖奇放棄了
+- [ ] 控制頁區塊收納
 - [ ] html js css 檔案分開
+- [ ] 感謝追隨
+- [ ] 感謝訂閱
+- [ ] 感謝揪團
+- [ ] paypal斗內監控做得到嗎?
+- [ ] 進度條優化

@@ -1,6 +1,7 @@
 package TwitchBot
 
 import (
+	"fmt"
 	"main/app/ErrorHandle"
 	"main/app/model"
 	"time"
@@ -13,6 +14,7 @@ import (
 // 套件
 // https://pkg.go.dev/github.com/gempir/go-twitch-irc/v3#section-readme
 
+var AutoHelloList map[string]bool
 var SendMsgQueue []string
 var TwitchClient *twitch.Client
 var retryCount int = 0
@@ -30,6 +32,14 @@ func Init() {
 	InitExpSettingFile() // 詳細設定
 	InitIndexFile()      // 進度條檔案
 	InitControlFile()    // 控制頁檔案
+
+	AutoHelloList = make(map[string]bool)
+	AutoHelloList = map[string]bool{
+		"nightbot":                              true,
+		"streamelements":                        true,
+		model.BotSetting.General.TargetTwitchID: true,
+		model.BotSetting.Twitch.ChatTwitchID:    true,
+	}
 
 	SendMsgQueue = make([]string, 0)
 
@@ -97,12 +107,16 @@ func TwitchCron() {
 
 // 訊息處理
 func twitchMessageHandle(client *twitch.Client, message twitch.PrivateMessage) {
-	// 自動打招呼
 	var context string
 
 	// 集氣挑戰功能
 	if model.BotSetting.GatheringEvent.GatheringSwitch {
 		context = cheerEventPoint(client, message)
+	}
+
+	// 自動打招呼
+	if model.BotSetting.Twitch.AutoHello {
+		context = autoHello(message)
 	}
 
 	// 有內容才發話
@@ -114,4 +128,13 @@ func twitchMessageHandle(client *twitch.Client, message twitch.PrivateMessage) {
 // 使用者通知處理
 func twitchUserNoticeHandle(client *twitch.Client, message twitch.UserNoticeMessage) {
 	subEventPoint(client, message)
+}
+
+// 自動打招呼模組
+func autoHello(message twitch.PrivateMessage) (context string) {
+	if _, ok := AutoHelloList[message.User.Name]; !ok && len(message.User.DisplayName) > 0 {
+		AutoHelloList[message.User.Name] = true
+		context = fmt.Sprintf("%s %s %s", message.User.DisplayName, model.BotSetting.Twitch.AutoHelloMsg, model.BotSetting.Twitch.AutoHelloEmoji)
+	}
+	return
 }

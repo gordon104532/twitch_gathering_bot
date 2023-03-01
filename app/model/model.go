@@ -21,11 +21,12 @@ type BotSettingModel struct {
 		EcpayMsg    string `json:"ecpayMsg"`
 	} `json:"ecpay"`
 	Twitch struct {
-		ChatTwitchID string `json:"chatTwitchID"`
-		TwitchOAth   string `json:"twitchOAth"`
-		// AutoHello      bool   `json:"autoHello"`
-		// AutoHelloMsg   string `json:"autoHelloMsg"`
-		// AutoHelloEmoji string `json:"autoHelloEmoji"`
+		ChatTwitchID   string `json:"chatTwitchID"`
+		TwitchOAth     string `json:"twitchOAth"`
+		LevelUpNotice  bool   `json:"levelUpNotice"`
+		AutoHello      bool   `json:"autoHello"`
+		AutoHelloMsg   string `json:"autoHelloMsg"`
+		AutoHelloEmoji string `json:"autoHelloEmoji"`
 	} `json:"twitch"`
 	GatheringEvent struct {
 		GatheringSwitch bool   `json:"gatheringSwitch"`
@@ -55,9 +56,10 @@ type BotSettingModel struct {
 type DetailSettingModel struct {
 	CheckEmoji  string `json:"checkEmoji"`
 	ProgressBar struct {
-		TitleColor  string `json:"titleColor"`
-		BarColor    string `json:"barColor"`
-		BarTxtColor string `json:"barTxtColor"`
+		TitleColor      string `json:"titleColor"`
+		BarColor        string `json:"barColor"`
+		BarTxtColor     string `json:"barTxtColor"`
+		BackgroundColor string `json:"backgroundColor"`
 	} `json:"progressBar"`
 	Subgift struct {
 		One    int `json:"one"`
