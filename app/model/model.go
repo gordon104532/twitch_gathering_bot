@@ -7,6 +7,7 @@ var DetailSetting DetailSettingModel
 type BotSettingModel struct {
 	General struct {
 		TargetTwitchID string `json:"targetTwitchID"`
+		TemplateSwitch int    `json:"templateSwitch"`
 	} `json:"general"`
 	Opay struct {
 		CheckDonate bool   `json:"checkDonate"`
@@ -60,6 +61,7 @@ type DetailSettingModel struct {
 		BarColor        string `json:"barColor"`
 		BarTxtColor     string `json:"barTxtColor"`
 		BackgroundColor string `json:"backgroundColor"`
+		SecondBarColor  string `json:"secondBarColor"`
 	} `json:"progressBar"`
 	Subgift struct {
 		One    int `json:"one"`

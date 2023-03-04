@@ -28,7 +28,8 @@ func InitBotSettingFile() {
 		var detailRaw string = `
 		{
 			"general":{
-				"targetTwitchID":""
+            "targetTwitchID":"",
+            "templateSwitch":2
 			},
 			"opay":{
 					"checkDonate": true,
@@ -138,7 +139,8 @@ func InitExpSettingFile() {
 		"titleColor":"#000000",
 		"barColor":"",
 		"barTxtColor": "",
-		"backgroundColor":"#919191"
+		"backgroundColor":"#919191",
+      "secondBarColor":"#28FF28"
 	},
 	"subgift":{
 		"one": 1,
@@ -225,33 +227,82 @@ func InitIndexFile() {
 		//msgJSON, _ := json.Marshal(model.DetailSetting)
 
 		var detailRaw string = `
-		<!doctype html>
-		<html lang="en">
-		<head>
-			<meta charset="UTF-8">
-			<meta name="viewport"
-				content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-			<meta http-equiv="X-UA-Compatible" content="ie=edge">
-			<meta http-equiv="refresh" content="60;url=http://127.0.0.1:8787/87">
+<!doctype html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <meta http-equiv="refresh" content="60;url=http://127.0.0.1:8787/87">
 
-			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-			<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-			<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-			<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-			<title>{{.title}}</title>
-		</head>
-		<body style="color:{{.titleColor}};">
-		<div style="text-align:center; font-size: large;">{{.title}} (Lv.{{.level}})</div>
+   <title>{{.title}}</title>
+</head>
+<style>
+   .progress-back{
+      height: 35px;
+      background: {{.backgroundColor}};
+      position: relative;
+      display:flex;
+   }
+   .progress-newbar{
+      height: 100%;
+      width: {{.percent}}%;
+      position: absolute;
+      background-color: {{.secondBarColor}};
+      color: {{.barTxtColor}};
+   }
+   .title{
+      text-align: left;
+      font-size: larger;
+      position: relative;
+      margin: auto;
+      margin-left: 10px;
+   }
+   .percentage{
+      position:relative;
+      text-align: center;
+      align-items: center;
+      flex: 1; 
+      margin: auto;
+   }
+   .point{
+      font-size:x-large;
+      text-align: right;
+      position:relative;
+      display: flex;
+      align-items: center;
+      margin: auto;
+      margin-right: 10px;
+   }
+</style>
+<body style="color:{{.titleColor}};">
 
-		<div class="progress" style="height: 30px; background: {{.backgroundColor}};">
-		<div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{.percent}}%; color:{{.barTxtColor}} ;background-color: {{.barColor}};font-size: larger;" aria-valuenow="{{.percent}}" aria-valuemin="0" aria-valuemax="100">目前: {{.nowPoint}}</div>
-		</div>
+<div style="display: {{.displayFirst}};">		
+   <div style="text-align:center; font-size: large;">{{.title}} (Lv.{{.level}})</div>
 
-		<div style="float:left;">{{.startPoint}}</div>
-		<div style="float:right;">{{.endPoint}}</div>
-		</body>
-		</html>
+   <div class="progress" style="height: 35px; background: {{.backgroundColor}};">
+      <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: {{.percent}}%; color:{{.barTxtColor}} ;background-color: {{.barColor}};font-size: larger;" aria-valuenow="{{.percent}}" aria-valuemin="0" aria-valuemax="100">目前: {{.nowPoint}}</div>
+   </div>
+
+   <div style="float:left;">{{.startPoint}}</div>
+   <div style="float:right;">{{.endPoint}}</div>
+</div>
+<div style="display: {{.displaySecond}};">	
+   <div class="progress-back">   
+      <div class="progress-newbar"></div>
+      <div class="title">{{.title}} (Lv.{{.level}})</div>
+      <div class="percentage">{{.percent}}%</div>
+      <div class="point"> {{.nowPoint}}/{{.endPoint}}</div>
+   </div>
+<div>
+</body>
+</html>
 		`
 
 		werr := os.WriteFile(filename, []byte(detailRaw), 0644)
@@ -282,8 +333,7 @@ func InitControlFile() {
 		}
 
 		var detailRaw string = `
-		
-		<!-- html -->
+<!-- html -->
 <head>
    <meta charset="UTF-8">
    <meta name="viewport"
@@ -304,6 +354,10 @@ func InitControlFile() {
    <div class="input-group mb-3">
       <span class="input-group-text" id="inputGroup-sizing-default" style="width: 110;">目標Twitch</span>
       <input v-model.trim="setting.general.targetTwitchID" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="圖奇帳號">
+   </div>
+   <div class="input-group mb-3">
+      <span class="input-group-text" id="inputGroup-sizing-default" style="width: 110;">進度條版型</span>
+      <input v-model.trim="setting.general.templateSwitch" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-default" placeholder="1:舊 2:新">
    </div>
    <br>
    <h3>歐富寶相關</h3>
@@ -493,77 +547,78 @@ func InitControlFile() {
 <!-- js -->
 <script>
    var settingInput =new Vue({
-     el:'#setting-input',
-     data:{
+      el:'#setting-input',
+      data:{
       setting:{
          general:{
-           targetTwitchID:'讀不到設定檔'
+            targetTwitchID:'讀不到設定檔',
+            templateSwitch: 2
          },
          opay:{
-           checkDonate:true,
-           opayID:"7BF5D2184771810862F9070719909401",
-           opayMsg:"/me 感謝 %s 贊助了 %d 元, %s",
-           opayToken: "4jR8bmQj%2FyIxCbuczdpPhRFCTTOCGOStfu9laNR9RT1L3ZUgBvJFe9iJtkB%2FIIhCPpNxDwSSaOAqoxxvNOXm7RgGG1200uwIoZPib%2BNiE5%2FQwtaFkYC2wLLIFmMrCqbpMYQFjr6BMLYPJMDdm%2BIvrLBKuKo%3D",
-           opayCookie:"YlSbHQpkKPWeyFc6CVnOZ5skpidCYIxvjK4aCaGs40CCgs9pU/hRDbF3aWzf5QHT/k+p1BFd634KTum6IDkvYsIBsyubKneBuQKHkmo4mu9Vl0LxDYO/8SEFYGo/kHenXUXYbXmsvn9yrE6u5y39uZzak54=",
+            checkDonate:true,
+            opayID:"7BF5D2184771810862F9070719909401",
+            opayMsg:"/me 感謝 %s 贊助了 %d 元, %s",
+            opayToken: "4jR8bmQj%2FyIxCbuczdpPhRFCTTOCGOStfu9laNR9RT1L3ZUgBvJFe9iJtkB%2FIIhCPpNxDwSSaOAqoxxvNOXm7RgGG1200uwIoZPib%2BNiE5%2FQwtaFkYC2wLLIFmMrCqbpMYQFjr6BMLYPJMDdm%2BIvrLBKuKo%3D",
+            opayCookie:"YlSbHQpkKPWeyFc6CVnOZ5skpidCYIxvjK4aCaGs40CCgs9pU/hRDbF3aWzf5QHT/k+p1BFd634KTum6IDkvYsIBsyubKneBuQKHkmo4mu9Vl0LxDYO/8SEFYGo/kHenXUXYbXmsvn9yrE6u5y39uZzak54=",
          },
          ecpay:{
-           checkDonate:true,
-           ecpayID:"EF382462D39404EADA212AF924B879C0",
-           ecpayMsg:"/me 感謝 %s 贊助了 %d 元, %s"
+            checkDonate:true,
+            ecpayID:"EF382462D39404EADA212AF924B879C0",
+            ecpayMsg:"/me 感謝 %s 贊助了 %d 元, %s"
          },
          twitch:{
-           chatTwitchID:"",
-           twitchOAth:"oauth:ijf94mqvg2x0u7mv8n7keidwoowk",
-		     levelUpNotice: true,
-             autoHello: true,
-			 autoHelloMsg: "安安",
-		     autoHelloEmoji: "<3",
+            chatTwitchID:"",
+            twitchOAth:"oauth:ijf94mqvg2x0u7mv8n7keidwoowk",
+            levelUpNotice: true,
+               autoHello: true,
+            autoHelloMsg: "安安",
+            autoHelloEmoji: "<3",
          },
          gatheringEvent:{
-           gatheringSwitch:true,
-           gatheringTitle:"預設名稱",
-           queryCommand:"!87",
-           subPoint:0,
-           cheerPoint:0,
-           stampPoint:0,
-           opayPoint:0,
-           ecpayPoint:0,
-           levelSetting:{
-             lv1:10,
-             lv2:20,
-             lv3:30,
-             lv4:40,
-             lv5:50,
-             lv6:60,
-             lv7:70,
-             lv8:80,
-             lv9:90,
-             lv10:100,
-           },
-           initPoint:100 
+            gatheringSwitch:true,
+            gatheringTitle:"預設名稱",
+            queryCommand:"!87",
+            subPoint:0,
+            cheerPoint:0,
+            stampPoint:0,
+            opayPoint:0,
+            ecpayPoint:0,
+            levelSetting:{
+               lv1:10,
+               lv2:20,
+               lv3:30,
+               lv4:40,
+               lv5:50,
+               lv6:60,
+               lv7:70,
+               lv8:80,
+               lv9:90,
+               lv10:100,
+            },
+            initPoint:100 
          },
       },
       visibility:{
          saveSuccess: false,
          saveFailed: false,
       }
-     },
-     const: {},
-     methods: {
-       // 取得設定檔
-       apiGetSetting() {
+      },
+      const: {},
+      methods: {
+         // 取得設定檔
+         apiGetSetting() {
          axios
          .get('/setting')
          .then( response => {
-             this.setting  = response.data;
-           })
+               this.setting  = response.data;
+            })
          .catch(function (error) { // 請求失敗處理
-           console.log("get setting err: "+error);
+            console.log("get setting err: "+error);
          });
-       },
+         },
    
-       // 更新設定檔
-       apiUpdateSetting() {
+         // 更新設定檔
+         apiUpdateSetting() {
          // 字串轉回數字
          this.transStringToInt();
 
@@ -583,11 +638,11 @@ func InitControlFile() {
                settingInput.visibility.saveFailed = false;
             }, 3000)
          });
-       },
+         },
 
-       // 網頁輸入的數字存資料時從字串改回數字
-       transStringToInt(){
-
+         // 網頁輸入的數字存資料時從字串改回數字
+         transStringToInt(){
+         this.setting.general.templateSwitch = parseInt(this.setting.general.templateSwitch)
          for (let key of Object.keys(this.setting.gatheringEvent)) {
             if (key !== "gatheringSwitch" && key !== "gatheringTitle" && key !== "queryCommand" && key !== "levelSetting"){
                this.setting.gatheringEvent[key] = parseInt(this.setting.gatheringEvent[key]);
@@ -599,13 +654,13 @@ func InitControlFile() {
                }
             }
          }
-       }
-     },
+         }
+      },
 
-     created(){
-       this.apiGetSetting()
-     }
-     });
+      created(){
+         this.apiGetSetting()
+      }
+      });
 </script>
 		`
 

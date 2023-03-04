@@ -8,26 +8,37 @@
 5. 計分紀錄
 6. 詳細分數倍率設定檔
 7. 顯示集氣條進度
-
-~~自動打招呼功能~~ 正式版移除
+8. 自動打招呼功能
 ## 打包指令
 - go build -mod=mod -o 87Bot_v1.6.exe
 - 64-bit
 > Mac打包方式 $ GOOS=darwin GOARCH=amd64 go build -o bin/app-amd64-darwin 87Bot_v1
 
 ## 使用說明
-1. 解壓縮 (主程式\設定檔\source Code)
-2. 把 主程式\設定檔 放在相同資料夾下(或是都丟在桌面)
-3. 打開設定檔 編輯下opayID 與 twitchOAth 等內容(如下)
-4. 點兩下主程式，看到"背景啟動" 與 "加入Twitch頻道"  且沒有其他錯誤訊息就可以了
-5. source Code 沒有用 跟我一樣
+- 前置作業
+1. 解壓縮後 只會有一個檔案，點兩下會再變出五個檔案
+(註:機器人很容易被防毒軟體抓走，如果有發生這樣的情況再請跟我說)
+2. 機器人啟動後會有個黑色的框框，暫時不用管他
+3. 用任何瀏覽器打開設定頁 (http://127.0.0.1:8787/control/)
+4. 參考歐法的說明填上個欄位後，滾到最下面案儲存，成功會顯示儲存成功
+5. 按叉叉關閉機器人 再開啟一次<如果資料都填正確的話 那機器人就開始運作了
 
+- 檢查方式
+0. 先把"升級通知" 關閉，並儲存
+1. 黑色框框會顯示 歐富寶檢查成功1次
+2. 有人訂閱/小奇點 可以在 gatTotalPoint.txt 中察看到
+3. (沒開台時 打開升級通知) 可以測試 手動加減分、升級通知、測試斗內功能
+4. 分數有變化後進度條約是60秒才會更新，勿緊張
+5. 點兩下主程式，看到"背景啟動" 與 "加入Twitch頻道"  且沒有其他錯誤訊息就可以
+
+＊詳細使用說明請看 /doc/bot使用教學.md
 ＊如果主程式被防毒軟體殺掉，請就救救他(設定排除路徑)
-詳細使用說明請看 /doc/bot使用教學.md
 
 ## 設定檔說明 
 v1.6 版開始可從網頁進行設定 http://127.0.0.1:8787/control/
 > 舊有直接更改檔案方式仍可使用，更改後請重啟程式，botSetting.txt
+- templateSwitch
+    > 進度條版型 1:舊 2:新
 - targetTwitchID
     > 發話的圖奇頻道
 - chatTwitchID
@@ -60,55 +71,6 @@ v1.6 版開始可從網頁進行設定 http://127.0.0.1:8787/control/
     > 綠界加分倍率(aka一塊加幾分)
 - initPoint
     > bot啟動時初始分數，後續加分也會持續寫入這一欄
-```
-{
-    "general":{
-        "targetTwitchID":""
-    },
-    "opay":{
-            "checkDonate": true,
-            "opayID":"7BF5D2184771810862F9070719909401",
-            "opayToken":"4jR8bmQj%2FyIxCbuczdpPhRFCTTOCGOStfu9laNR9RT1L3ZUgBvJFe9iJtkB%2FIIhCPpNxDwSSaOAqoxxvNOXm7RgGG1200uwIoZPib%2BNiE5%2FQwtaFkYC2wLLIFmMrCqbpMYQFjr6BMLYPJMDdm%2BIvrLBKuKo%3D",
-            "opayCookie":"YlSbHQpkKPWeyFc6CVnOZ5skpidCYIxvjK4aCaGs40CCgs9pU/hRDbF3aWzf5QHT/k+p1BFd634KTum6IDkvYsIBsyubKneBuQKHkmo4mu9Vl0LxDYO/8SEFYGo/kHenXUXYbXmsvn9yrE6u5y39uZzak54=",
-            "opayMsg":"/me 感謝 %s 贊助了 %d 元, %s"
-    },
-    "ecpay":{
-            "checkDonate": true,
-            "ecpayID":"EF382462D39404EADA212AF924B879C0",
-            "ecpayMsg":"/me 感謝 %s 贊助了 %d 元, %s"
-    },
-    "twitch":{
-        "chatTwitchID":"",
-        "twitchOAth":"",
-        "levelUpNotice": true
-        "autoHello":true,
-        "autoHelloMsg": "安安",
-        "autoHelloEmoji": "<3"
-    },
-    "gatheringEvent":{
-        "gatheringSwitch": true,
-        "gatheringTitle": "活動名稱",
-        "queryCommand": "!進度",
-        "stampPoint": 3,
-        "subPoint": 150,
-        "cheerPoint": 1,
-        "opayPoint": 3,
-        "ecpayPoint": 3,
-        "levelSetting":{
-            "lv1":87,
-            "lv2":587,
-            "lv3":1487,
-            "lv4":3487,
-            "lv5":5487,
-            "lv6":9487,
-            "lv7":13487,
-            "lv8":15487,
-            "lv9":17487,
-            "lv10":19487
-        },
-        "initPoint":0
-    }
-}
 ```
 
 ## 版本紀錄
@@ -215,7 +177,7 @@ twitchOAth
 - [Changed] Prime訂閱算層級一
 - [Changed] 修正color拼錯字，影響靜態檔與設定檔
 
-### v1.6預定項目
+### v1.6 for 
 - [x] 網頁版設定頁面
 - [x] 讀取服務設定檔
 - [x] 寫入服務設定檔
@@ -231,6 +193,9 @@ twitchOAth
 > 之後改控制頁 先改/bak/裡的index檔，再貼過去TwitchBot/Event.go裡
 > 之後改設定檔 先改Readme說明，再貼過去TwitchBot/Event.go裡
 
+### v1.7
+- [x] 進度條優化
+- [x] 設定檔可切換版型
 
 待優化項目
 - [ ] 控制頁參數驗證(寫一個功能監聽變化來改變dom?)
@@ -243,4 +208,3 @@ twitchOAth
 - [ ] 感謝訂閱
 - [ ] 感謝揪團
 - [ ] paypal斗內監控做得到嗎?
-- [ ] 進度條優化

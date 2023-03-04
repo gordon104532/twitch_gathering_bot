@@ -46,6 +46,15 @@ func Router() {
 		if endPoint < 1 {
 			endPoint = 1
 		}
+
+		// 控制進度條版型
+		var displayFirst, displaySecond string = "none", "none"
+		switch model.BotSetting.General.TemplateSwitch {
+		case 1:
+			displayFirst = ""
+		default: // 預設使用新模板
+			displaySecond = ""
+		}
 		c.HTML(http.StatusOK, "index.tmpl", gin.H{
 			"title":           model.BotSetting.GatheringEvent.GatheringTitle,
 			"startPoint":      startPoint,
@@ -57,6 +66,9 @@ func Router() {
 			"barColor":        model.DetailSetting.ProgressBar.BarColor,
 			"barTxtColor":     model.DetailSetting.ProgressBar.BarTxtColor,
 			"backgroundColor": model.DetailSetting.ProgressBar.BackgroundColor,
+			"displayFirst":    displayFirst,
+			"displaySecond":   displaySecond,
+			"secondBarColor":  model.DetailSetting.ProgressBar.SecondBarColor,
 		})
 	})
 
