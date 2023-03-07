@@ -245,40 +245,42 @@ func InitIndexFile() {
 </head>
 <style>
    .progress-back{
-      height: 35px;
-      background: {{.backgroundColor}};
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       position: relative;
-      display:flex;
+      padding: 0 10px;
+      height: 35px;
+      background: gainsboro;
+      border-radius: 10px;
+      box-shadow: 0 1px 5px gray;
    }
    .progress-newbar{
+      position: absolute;
+      top: 0;
+      left: 0;
       height: 100%;
       width: {{.percent}}%;
-      position: absolute;
-      background-color: {{.secondBarColor}};
       color: {{.barTxtColor}};
+      background-color: #3fd27f;
+      border-radius: 10px;
    }
    .title{
-      text-align: left;
-      font-size: larger;
       position: relative;
-      margin: auto;
-      margin-left: 10px;
+      font-size: larger;
+      font-weight: bold;
+      font-family: Microsoft JhengHei;
    }
    .percentage{
-      position:relative;
-      text-align: center;
-      align-items: center;
       flex: 1; 
-      margin: auto;
+      position: relative;
+      text-align: center;
+      font-weight: 500;
    }
    .point{
-      font-size:x-large;
-      text-align: right;
-      position:relative;
-      display: flex;
-      align-items: center;
-      margin: auto;
-      margin-right: 10px;
+      position: relative;
+      font-size: large;
+      font-weight: 500;
    }
 </style>
 <body style="color:{{.titleColor}};">

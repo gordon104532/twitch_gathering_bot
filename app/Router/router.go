@@ -106,5 +106,10 @@ func Router() {
 		c.String(http.StatusOK, "ok")
 	})
 
+	r.GET("/rank", func(c *gin.Context) {
+		// 預設最多10名
+		c.String(http.StatusOK, TwitchBot.RankByPoint(10))
+	})
+
 	r.Run(":8787")
 }

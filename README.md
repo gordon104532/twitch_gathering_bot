@@ -10,7 +10,7 @@
 7. 顯示集氣條進度
 8. 自動打招呼功能
 ## 打包指令
-- go build -mod=mod -o 87Bot_v1.6.exe
+- go build -mod=mod -o 87Bot_v1.7.exe
 - 64-bit
 > Mac打包方式 $ GOOS=darwin GOARCH=amd64 go build -o bin/app-amd64-darwin 87Bot_v1
 
@@ -196,6 +196,9 @@ twitchOAth
 ### v1.7
 - [x] 進度條優化
 - [x] 設定檔可切換版型
+- [x] 列出rank
+>  預設最多10名
+>  因為是讀取gatTotalPoint.txt 檔案，所以如果有用手動加減分的話，還請記得調整該筆"暱稱" 內容為正確的人，不然排名出來最高分可能會是自己
 
 待優化項目
 - [ ] 控制頁參數驗證(寫一個功能監聽變化來改變dom?)
@@ -208,3 +211,5 @@ twitchOAth
 - [ ] 感謝訂閱
 - [ ] 感謝揪團
 - [ ] paypal斗內監控做得到嗎?
+- [ ] 排名顯示在控制頁
+- [ ] 排名在控制頁可選列出幾個名次
