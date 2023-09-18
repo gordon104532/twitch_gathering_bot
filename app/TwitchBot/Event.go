@@ -218,7 +218,12 @@ func subEventPoint(client *twitch.Client, message twitch.UserNoticeMessage) {
 		}
 
 		switch message.MsgParams["msg-param-sub-plan"] {
-		case "1000", "Prime":
+		case "Prime":
+			// 針對Prime做特例調整為 層級一/一個月
+			event = "Prime"
+			month = model.DetailSetting.Resub.One
+			tier = model.DetailSetting.Tier.One
+		case "1000":
 			tier = model.DetailSetting.Tier.One
 		case "2000":
 			tier = model.DetailSetting.Tier.Two

@@ -1,10 +1,13 @@
 package Router
 
 import (
+	"fmt"
 	"main/app/ErrorHandle"
 	"main/app/TwitchBot"
 	"main/app/model"
 	"net/http"
+	"strconv"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -106,9 +109,16 @@ func Router() {
 		c.String(http.StatusOK, "ok")
 	})
 
+	// 撈出分數紀錄做排行
 	r.GET("/rank", func(c *gin.Context) {
+		target, err := strconv.Atoi(strings.TrimSpace(c.Query("target")))
+		if err != nil && len(c.Query("target")) > 0 {
+			c.String(400, fmt.Sprintf("參數錯誤, err: %+v", err))
+			return
+		}
+
 		// 預設最多10名
-		c.String(http.StatusOK, TwitchBot.RankByPoint(10))
+		c.String(http.StatusOK, TwitchBot.RankByPoint(target))
 	})
 
 	r.Run(":8787")

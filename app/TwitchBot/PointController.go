@@ -74,7 +74,8 @@ func RankByPoint(target int) (rank string) {
 	})
 
 	var printRank int
-	if len(result) < target {
+	// 無值全印 或 有值但不夠
+	if target == 0 || len(result) < target {
 		printRank = len(result)
 	} else {
 		printRank = target
